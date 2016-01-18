@@ -1,3 +1,4 @@
+
 /**
  * ofxTimeline
  * openFrameworks graphical timeline addon
@@ -36,13 +37,15 @@
 #include "ofxTextInputField.h"
 #include "ofxDatGui.h"
 
+//int DROP_WIDTH = 180;
+
 class ofxTLDropDownFlag : public ofxTLKeyframe {
-  public:
+public:
     
     ofxTLDropDownFlag()
     {
-        theme = new ofxDatGuiThemeWireframe();
-        theme->layout.width = 120;
+        //theme = new ofxDatGuiThemeWireframe();
+        //theme->layout.width = 120;
         
         vector<string> vecPresets;
         vecPresets.push_back("1 COLORITO");
@@ -53,14 +56,13 @@ class ofxTLDropDownFlag : public ofxTLKeyframe {
         vecPresets.push_back("6 PERROFRITO");
         vecPresets.push_back("7 XORIZITO");
         vecPresets.push_back("8 HERMANITO");
-    
-        
         
         menu = new ofxDatGuiDropdown("Preset ?", vecPresets);
-        menu->setWidth(80);
+        menu->setWidth(180);
+
+        //menu->expand();
         //menu->onDropdownEvent(this, &ofxTLDropDownFlags::onDropdownEvent);
-        menu->expand();
-        menu->setTheme(theme);
+        //menu->setTheme(theme);
     }
     
     vector<ofColor> colors;
@@ -69,49 +71,48 @@ class ofxTLDropDownFlag : public ofxTLKeyframe {
     
     ofxTextInputField textField;
     ofRectangle display;
-
     
-//	virtual ~ofxTLFlag();
+    
+    //	virtual ~ofxTLFlag();
 };
 
+
+
 class ofxTLDropDownFlags : public ofxTLBangs {
-  public:
-	ofxTLDropDownFlags();
-	
-	virtual void draw();
-    virtual void drawModalContent();
-	virtual void update();
+public:
+    ofxTLDropDownFlags();
     
-	virtual bool mousePressed(ofMouseEventArgs& args, long millis);
+    virtual void draw();
+    virtual void update();
+    void onDropdownEvent(ofxDatGuiDropdownEvent e);
+    
+    virtual bool mousePressed(ofMouseEventArgs& args, long millis);
     virtual void mouseDragged(ofMouseEventArgs& args, long millis);
-	virtual void mouseReleased(ofMouseEventArgs& args, long millis);
-	
-	virtual void keyPressed(ofKeyEventArgs& args);
-	virtual void unselectAll();
+    virtual void mouseReleased(ofMouseEventArgs& args, long millis);
+    
+    virtual void keyPressed(ofKeyEventArgs& args);
+    virtual void unselectAll();
     
     virtual string getTrackType();
-	
-	virtual void addFlag(string key);
-	virtual void addFlagAtTime(string key, unsigned long long time);
+    
+    virtual void addFlag(string key);
+    virtual void addFlagAtTime(string key, unsigned long long time);
     virtual ofxTLDropDownFlag* getFlagWithKey(string key);
-	
-    void onDropdownEvent(ofxDatGuiDropdownEvent e);
-
     
 protected:
     
     virtual ofxTLKeyframe* newKeyframe();
     virtual void restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore);
-	virtual void storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore);
+    virtual void storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore);
     virtual void bangFired(ofxTLKeyframe* key);
-	virtual void willDeleteKeyframe(ofxTLKeyframe* keyframe);
-
-	//only set per mousedown/mouseup cycle
-	bool clickedTextField;
-	bool enteringText;
+    virtual void willDeleteKeyframe(ofxTLKeyframe* keyframe);
+    
+    //only set per mousedown/mouseup cycle
+    ofxTLDropDownFlag* clickedTextField;
+    bool enteringText;
     
     vector<ofColor> colors;
     ofxDatGuiDropdown* menu;
 
-
+    
 };

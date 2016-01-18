@@ -1447,7 +1447,7 @@ void ofxTimeline::recalculateBoundingRects(){
                                         width, currentPage->getBottomEdge()-ticker->getDrawRect().y);
 	ticker->setTotalDrawRect(tickerRect);		
 	totalDrawRect = ofRectangle(offset.x, offset.y, width, zoomer->getDrawRect().y+zoomer->getDrawRect().height - offset.y);
-    cout << "totalDrawRect : " << totalDrawRect.x << "," << totalDrawRect.y << " , " << totalDrawRect.width << " , " << totalDrawRect.height << endl;
+//    cout << "totalDrawRect : " << totalDrawRect.x << "," << totalDrawRect.y << " , " << totalDrawRect.width << " , " << totalDrawRect.height << endl;
 }
 
 

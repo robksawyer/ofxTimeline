@@ -38,26 +38,6 @@
 ofxTLDropDownFlags::ofxTLDropDownFlags() {
     enteringText = false;
     clickedTextField = NULL;
-    
-    
-}
-
-void ofxTLDropDownFlags::update()
-{
-    for(int i = keyframes.size()-1; i >= 0; i--)
-    {
-        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
-        if(isKeyframeIsInBounds(key))
-        {
-            key->menu->update();
-        }
-    }
-}
-
-
-void ofxTLDropDownFlags::drawModalContent()
-{
-    cout << "DropDownFlags Draw Modal _ " << ofGetElapsedTimef() << endl;
 }
 
 void ofxTLDropDownFlags::draw(){
@@ -70,8 +50,6 @@ void ofxTLDropDownFlags::draw(){
     
     ofxTLBangs::draw();
     
-    
-    
     ofFill();
     ofSetLineWidth(5);
     for(int i = keyframes.size()-1; i >= 0; i--){
@@ -82,7 +60,7 @@ void ofxTLDropDownFlags::draw(){
             ofSetColor(timeline->getColors().backgroundColor);
             int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
             key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
-                                       textHeight-10, 1000, 350);
+                                       textHeight-10, 180, 15);
             ofRect(key->display);
             
             ofSetColor(timeline->getColors().textColor);
@@ -91,10 +69,12 @@ void ofxTLDropDownFlags::draw(){
             key->textField.bounds.y = key->display.y;
             key->textField.draw();
             
+            
+            //DatGUI
             key->menu->setPosition(key->display.x,key->display.y);
             key->menu->draw();
             
-            
+
         }
     }
     ofPopStyle();
@@ -109,7 +89,7 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
     //    }
     
     clickedTextField = NULL;
-    //look at each element to see if a text field was clicked
+    //look at each keyframe to see if a text field was clicked
     for(int i = 0; i < keyframes.size(); i++){
         ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
         if(key->display.inside(args.x, args.y)){
@@ -123,20 +103,32 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
     //so that keyboard input all goes to the text field.
     //selection model is designed so that you can type into
     //mulitple fields at once
-    if(clickedTextField != NULL){
+    if(clickedTextField != NULL)
+    {
+        cout << " a textfiled was pressed ... present MODAL !! " << endl;
+        // !!!!!!!!!!!!!!!!!!!!!
         timeline->presentedModalContent(this);
-        if(!ofGetModifierSelection()){
+        // !!!!!!!!!!!!!!!!!!!!!
+        if(!ofGetModifierSelection())
+        {
+            cout << " no modifer key so unselectAll!! " << endl;
+
             timeline->unselectAll();
         }
-//        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
-//            clickedTextField->textField.endEditing();
-//        }
-//        else{
-//            clickedTextField->textField.beginEditing();
-//            enteringText = true;
-//            //make sure this key is selected
-//            selectKeyframe(clickedTextField);
-//        }
+        
+        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing())
+        {
+            // is SHIFT and we where editing ... end editing !!
+            clickedTextField->textField.endEditing();
+        }
+        else{
+            cout << " text field BEGIN EDIT !! and select the keyframe as we're editing it !! " << endl;
+
+            clickedTextField->textField.beginEditing();
+            enteringText = true;
+            //make sure this key is selected
+            selectKeyframe(clickedTextField);
+        }
         return false;
     }
     else{
@@ -145,7 +137,10 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
                 ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
             }
             enteringText = false;
+            // DIMISS MODAL CONTENT !! 
             timeline->dismissedModalContent();
+            cout << " mouse Press :: dismissing MODAL # # #  !!! " << endl;
+
         }
     }
     
@@ -166,10 +161,12 @@ void ofxTLDropDownFlags::mouseDragged(ofMouseEventArgs& args, long millis){
 //if we didn't click on a text field and we are entering txt
 //take off the typing mode. Hitting enter will also do this
 void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
-    if(enteringText){
+    if(enteringText)
+    {
         //if we clicked outside of the rect, definitely deslect everything
         if(clickedTextField == NULL && !ofGetModifierSelection()){
-            for(int i = 0; i < selectedKeyframes.size(); i++){
+            for(int i = 0; i < selectedKeyframes.size(); i++)
+            {
                 ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
             }
             enteringText = false;
@@ -292,3 +289,17 @@ void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
 {
     cout << "DropDownFlags got the event " << endl;
 }
+
+void ofxTLDropDownFlags::update()
+{
+    for(int i = keyframes.size()-1; i >= 0; i--)
+    {
+        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        if(isKeyframeIsInBounds(key))
+        {
+            key->menu->update();
+        }
+    }
+}
+
+
