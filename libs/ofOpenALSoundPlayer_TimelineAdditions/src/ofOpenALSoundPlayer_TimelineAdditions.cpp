@@ -596,7 +596,7 @@ void ofOpenALSoundPlayer_TimelineAdditions::unloadSound(){
 }
 
 //------------------------------------------------------------
-bool ofOpenALSoundPlayer_TimelineAdditions::getIsPlaying(){
+bool ofOpenALSoundPlayer_TimelineAdditions::getIsPlaying() const {
 	if(sources.empty()) return false;
 	if(isStreaming) return isThreadRunning();
 	ALint state;
@@ -621,12 +621,12 @@ bool ofOpenALSoundPlayer_TimelineAdditions::getIsPaused(){
 }
 
 //------------------------------------------------------------
-float ofOpenALSoundPlayer_TimelineAdditions::getSpeed(){
+float ofOpenALSoundPlayer_TimelineAdditions::getSpeed() const {
 	return speed;
 }
 
 //------------------------------------------------------------
-float ofOpenALSoundPlayer_TimelineAdditions::getPan(){
+float ofOpenALSoundPlayer_TimelineAdditions::getPan() const{
 	return pan;
 }
 
@@ -655,12 +655,12 @@ void ofOpenALSoundPlayer_TimelineAdditions::setVolume(float vol){
 }
 
 //------------------------------------------------------------
-float ofOpenALSoundPlayer_TimelineAdditions::getVolume(){
+float ofOpenALSoundPlayer_TimelineAdditions::getVolume() const {
 	return volume;    
 }
 
 //------------------------------------------------------------
-bool ofOpenALSoundPlayer_TimelineAdditions::isLoaded(){
+bool ofOpenALSoundPlayer_TimelineAdditions::isLoaded() const {
     return bLoadedOk;
 }
 
@@ -692,7 +692,7 @@ void ofOpenALSoundPlayer_TimelineAdditions::setPositionMS(int ms){
 }
 
 //------------------------------------------------------------
-float ofOpenALSoundPlayer_TimelineAdditions::getPosition(){
+float ofOpenALSoundPlayer_TimelineAdditions::getPosition() const {
 	if(duration==0) return 0;
 	if(sources.empty()) return 0;
 	float pos;
@@ -715,7 +715,7 @@ float ofOpenALSoundPlayer_TimelineAdditions::getPosition(){
 }
 
 //------------------------------------------------------------
-int ofOpenALSoundPlayer_TimelineAdditions::getPositionMS(){
+int ofOpenALSoundPlayer_TimelineAdditions::getPositionMS() const {
 	if(duration==0) return 0;
 	if(sources.empty()) return 0;
 	int pos;

@@ -38,6 +38,26 @@
 ofxTLDropDownFlags::ofxTLDropDownFlags() {
     enteringText = false;
     clickedTextField = NULL;
+    
+    
+}
+
+void ofxTLDropDownFlags::update()
+{
+    for(int i = keyframes.size()-1; i >= 0; i--)
+    {
+        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        if(isKeyframeIsInBounds(key))
+        {
+            key->menu->update();
+        }
+    }
+}
+
+
+void ofxTLDropDownFlags::drawModalContent()
+{
+    cout << "DropDownFlags Draw Modal _ " << ofGetElapsedTimef() << endl;
 }
 
 void ofxTLDropDownFlags::draw(){
@@ -50,6 +70,8 @@ void ofxTLDropDownFlags::draw(){
     
     ofxTLBangs::draw();
     
+    
+    
     ofFill();
     ofSetLineWidth(5);
     for(int i = keyframes.size()-1; i >= 0; i--){
@@ -60,7 +82,7 @@ void ofxTLDropDownFlags::draw(){
             ofSetColor(timeline->getColors().backgroundColor);
             int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
             key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
-                                       textHeight-10, 100, 15);
+                                       textHeight-10, 1000, 350);
             ofRect(key->display);
             
             ofSetColor(timeline->getColors().textColor);
@@ -68,6 +90,11 @@ void ofxTLDropDownFlags::draw(){
             key->textField.bounds.x = key->display.x;
             key->textField.bounds.y = key->display.y;
             key->textField.draw();
+            
+            key->menu->setPosition(key->display.x,key->display.y);
+            key->menu->draw();
+            
+            
         }
     }
     ofPopStyle();
@@ -101,15 +128,15 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
         if(!ofGetModifierSelection()){
             timeline->unselectAll();
         }
-        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
-            clickedTextField->textField.endEditing();
-        }
-        else{
-            clickedTextField->textField.beginEditing();
-            enteringText = true;
-            //make sure this key is selected
-            selectKeyframe(clickedTextField);
-        }
+//        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
+//            clickedTextField->textField.endEditing();
+//        }
+//        else{
+//            clickedTextField->textField.beginEditing();
+//            enteringText = true;
+//            //make sure this key is selected
+//            selectKeyframe(clickedTextField);
+//        }
         return false;
     }
     else{
@@ -229,7 +256,7 @@ void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
 }
 
 string ofxTLDropDownFlags::getTrackType(){
-    return "Flags";
+    return "DropDownFlags";
 }
 
 void ofxTLDropDownFlags::addFlag(string key) {
@@ -261,3 +288,7 @@ ofxTLDropDownFlag* ofxTLDropDownFlags::getFlagWithKey(string key){
     return NULL;
 }
 
+void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
+{
+    cout << "DropDownFlags got the event " << endl;
+}
