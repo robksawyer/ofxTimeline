@@ -1447,6 +1447,7 @@ void ofxTimeline::recalculateBoundingRects(){
                                         width, currentPage->getBottomEdge()-ticker->getDrawRect().y);
 	ticker->setTotalDrawRect(tickerRect);		
 	totalDrawRect = ofRectangle(offset.x, offset.y, width, zoomer->getDrawRect().y+zoomer->getDrawRect().height - offset.y);
+    cout << "totalDrawRect : " << totalDrawRect.x << "," << totalDrawRect.y << " , " << totalDrawRect.width << " , " << totalDrawRect.height << endl;
 }
 
 
@@ -1883,6 +1884,21 @@ ofxTLFlags* ofxTimeline::addFlags(string trackName, string xmlFileName){
 	addTrack(confirmedUniqueName(trackName), newFlags);
 	return newFlags;
 }
+
+ofxTLDropDownFlags* ofxTimeline::addDropDownFlags(string trackName){
+    string uniqueName = confirmedUniqueName(trackName);
+    return addDropDownFlags(uniqueName, nameToXMLName(uniqueName));
+}
+
+
+ofxTLDropDownFlags* ofxTimeline::addDropDownFlags(string trackName, string xmlFileName){
+    ofxTLDropDownFlags* newDropDownFlags = new ofxTLDropDownFlags();
+    newDropDownFlags->setCreatedByTimeline(true);
+    newDropDownFlags->setXMLFileName(xmlFileName);
+    addTrack(confirmedUniqueName(trackName), newDropDownFlags);
+    return newDropDownFlags;
+}
+
 
 ofxTLColorTrack* ofxTimeline::addColors(string trackName){
 	string uniqueName = confirmedUniqueName(trackName);
