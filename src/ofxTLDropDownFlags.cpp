@@ -60,7 +60,7 @@ void ofxTLDropDownFlags::draw(){
             ofSetColor(timeline->getColors().backgroundColor);
             int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
             key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
-                                       textHeight-10, 180, 15);
+                                       textHeight-10, 180, 30);
             ofRect(key->display);
             
             ofSetColor(timeline->getColors().textColor);
@@ -105,46 +105,58 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
     //mulitple fields at once
     if(clickedTextField != NULL)
     {
-        cout << " a textfiled was pressed ... present MODAL !! " << endl;
-        // !!!!!!!!!!!!!!!!!!!!!
+        cout << " PRESENT MODAL" << endl;
         timeline->presentedModalContent(this);
-        // !!!!!!!!!!!!!!!!!!!!!
-        if(!ofGetModifierSelection())
-        {
-            cout << " no modifer key so unselectAll!! " << endl;
-
-            timeline->unselectAll();
-        }
+        enteringText=true;
         
-        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing())
-        {
-            // is SHIFT and we where editing ... end editing !!
-            clickedTextField->textField.endEditing();
-        }
-        else{
-            cout << " text field BEGIN EDIT !! and select the keyframe as we're editing it !! " << endl;
-
-            clickedTextField->textField.beginEditing();
-            enteringText = true;
-            //make sure this key is selected
-            selectKeyframe(clickedTextField);
-        }
-        return false;
+        
+//        cout << " a textfiled was pressed ... present MODAL !! " << endl;
+//        // !!!!!!!!!!!!!!!!!!!!!
+//        timeline->presentedModalContent(this);
+//        // !!!!!!!!!!!!!!!!!!!!!
+//        if(!ofGetModifierSelection())
+//        {
+//            cout << " no modifer key so unselectAll!! " << endl;
+//
+//            timeline->unselectAll();
+//        }
+//        
+//        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing())
+//        {
+//            // is SHIFT and we where editing ... end editing !!
+//            clickedTextField->textField.endEditing();
+//        }
+//        else{
+//            cout << " text field BEGIN EDIT !! and select the keyframe as we're editing it !! " << endl;
+//
+//            clickedTextField->textField.beginEditing();
+//            enteringText = true;
+//            //make sure this key is selected
+//            selectKeyframe(clickedTextField);
+//        }
+//        return false;
     }
-    else{
-        if(enteringText && !isHovering()){
-            for(int i = 0; i < selectedKeyframes.size(); i++){
-                ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
-            }
-            enteringText = false;
-            // DIMISS MODAL CONTENT !! 
-            timeline->dismissedModalContent();
-            cout << " mouse Press :: dismissing MODAL # # #  !!! " << endl;
-
-        }
+    else
+    {
+        cout << " DISMISSED MODAL" << endl;
+        timeline->dismissedModalContent();
+        enteringText = false;
+        
+//        if(enteringText && !isHovering())
+//        {
+//            for(int i = 0; i < selectedKeyframes.size(); i++){
+//                ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
+//            }
+//            enteringText = false;
+//            // DIMISS MODAL CONTENT !! 
+//            timeline->dismissedModalContent();
+//            cout << " mouse Press :: dismissing MODAL # # #  !!! " << endl;
+//
+//        }
     }
     
-    if(!enteringText){
+    if(!enteringText)
+    {
         //if we get all the way here we didn't click on a text field and we aren't
         //currently entering text so proceed as normal
         return ofxTLBangs::mousePressed(args, millis);
