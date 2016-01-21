@@ -134,13 +134,17 @@ void ofxTLTrackHeader::draw(){
 		ofSetColor(getTimeline()->getColors().textColor);
 	}
 
-	if(getTrack()->getDrawRect().height > 0 || bounds.height > 0){
-	    nameField.draw();
-	}
-	
 	ofSetColor(track->getTimeline()->getColors().outlineColor);
+    ofFill();
+    ofSetColor(255,255,255,200);
 	ofRect(bounds);
-	
+
+    ofSetColor(track->getTimeline()->getColors().textColor);
+    ofSetColor(0);
+    if(getTrack()->getDrawRect().height > 0 || bounds.height > 0){
+        nameField.draw();
+    }
+
 	//draw grippy lines on the footer draggable element
 	if(footerHeight > 0){
 		if(draggingSize){

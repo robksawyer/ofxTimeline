@@ -40,7 +40,7 @@ ofxTLLFO::ofxTLLFO(){
 	rectHeight = 15;
 	mouseDownRect = NULL;
 	editingParam = NULL;
-	drawingLFORect = false;
+    drawingLFORect = false;
 }
 
 ofxTLLFO::~ofxTLLFO(){
@@ -442,7 +442,10 @@ void ofxTLLFO::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
 	xmlStore.addValue("expInterpolate",lfoKey->expInterpolate);
 }
 
-void ofxTLLFO::selectedKeySecondaryClick(ofMouseEventArgs& args){
+void ofxTLLFO::selectedKeySecondaryClick(ofMouseEventArgs& args)
+{
+    cout << "LFO : secondary click" << endl;
+    
 	drawingLFORect = true;
 	lfoRect = ofRectangle(args.x,args.y, 40,40);
 	timeline->presentedModalContent(this);

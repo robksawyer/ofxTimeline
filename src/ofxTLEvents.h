@@ -84,6 +84,8 @@ class ofxTLBangEventArgs : public ofEventArgs {
 	int currentFrame;
     long currentMillis;
 	string flag;
+    // eloi hack :: to be able to return float values on BangEvent
+    float value;
 };
 
 class ofxTLSwitchEventArgs : public ofEventArgs {

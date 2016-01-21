@@ -125,7 +125,8 @@ void ofxTLPage::draw(){
 		headers[i]->draw();
 	}
 	
-	if(!headerHasFocus && !footerIsDragging && draggingInside && snapPoints.size() > 0){
+	if(!headerHasFocus && !footerIsDragging && draggingInside && snapPoints.size() > 0)
+    {
 		ofPushStyle();
 		ofSetColor(255,255,255,100);
 		set<unsigned long long>::iterator it;
@@ -149,7 +150,6 @@ void ofxTLPage::draw(){
 		ofNoFill();
 		ofSetColor(timeline->getColors().keyColor, 255);
 		ofRect(selectionRectangle);
-		
 	}
 }
 
@@ -667,7 +667,8 @@ void ofxTLPage::removeTrack(ofxTLTrack* track){
     ofLogError() << "ofxTLPage::removeTrack -- track named " << track->getName() << " not found!" << endl;
 }
 
-void ofxTLPage::recalculateHeight(){
+void ofxTLPage::recalculateHeight()
+{
 	float currentY = trackContainerRect.y;
 	float totalHeight = 0;
 

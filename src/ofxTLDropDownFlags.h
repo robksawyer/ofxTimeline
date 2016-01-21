@@ -34,7 +34,6 @@
 #pragma once
 #include "ofMain.h"
 #include "ofxTLBangs.h"
-#include "ofxTextInputField.h"
 #include "ofxDatGui.h"
 
 //int DROP_WIDTH = 180;
@@ -53,12 +52,17 @@ public:
         vecPresets.push_back("3 XIRINGUITO");
         vecPresets.push_back("4 MENGUANTIO");
         vecPresets.push_back("5 MANOLITO");
-        vecPresets.push_back("6 PERROFRITO");
-        vecPresets.push_back("7 XORIZITO");
-        vecPresets.push_back("8 HERMANITO");
         
         menu = new ofxDatGuiDropdown("Preset ?", vecPresets);
-        menu->setWidth(180);
+        menu->setWidth(140);
+        menu->setOpacity(1.0);
+        ofColor c1 = ofColor(0,0,0);
+        ofColor c2 = ofColor(60,60,60);
+        ofColor c3 = ofColor(80,80,80);
+        ofColor c4 = ofColor(0,255,255);
+        
+        menu->setBackgroundColors(c1,c2,c3);
+        //menu->setLabelColor(c4);
 
         //menu->expand();
         //menu->onDropdownEvent(this, &ofxTLDropDownFlags::onDropdownEvent);
@@ -69,8 +73,6 @@ public:
     ofxDatGuiDropdown* menu;
     ofxDatGuiTheme* theme;
     
-    ofxTextInputField textField;
-    ofRectangle display;
     
     
     //	virtual ~ofxTLFlag();
@@ -86,6 +88,7 @@ public:
     virtual void update();
     void onDropdownEvent(ofxDatGuiDropdownEvent e);
     
+    virtual void mouseMoved(ofMouseEventArgs& args, long millis);
     virtual bool mousePressed(ofMouseEventArgs& args, long millis);
     virtual void mouseDragged(ofMouseEventArgs& args, long millis);
     virtual void mouseReleased(ofMouseEventArgs& args, long millis);
@@ -98,6 +101,11 @@ public:
     virtual void addFlag(string key);
     virtual void addFlagAtTime(string key, unsigned long long time);
     virtual ofxTLDropDownFlag* getFlagWithKey(string key);
+    
+    //datGui related
+    void collapseAllFlags();
+    int isAnyOptionInFocus(ofxTLDropDownFlag* f);
+    int isAnyDropDownInFocus();
     
 protected:
     

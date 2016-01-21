@@ -65,7 +65,7 @@ ofxTimeline::ofxTimeline()
 	isEnabled(false),
 	dragAnchorSet(false),
 	snapToBPM(false),
-	snapToOtherElements(true),
+	snapToOtherElements(false),
     spacebarTogglesPlay(true),
 	dragMillsecondOffset(0),
 	movePlayheadOnPaste(true),

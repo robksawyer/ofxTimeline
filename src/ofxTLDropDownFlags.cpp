@@ -41,6 +41,17 @@ ofxTLDropDownFlags::ofxTLDropDownFlags() {
 }
 
 void ofxTLDropDownFlags::draw(){
+
+//    if(timeline->isModal())
+//    {
+//        ofSetColor(255,0,0);
+//        ofCircle(0,0,50);
+//    }
+//    else
+//    {
+//        ofSetColor(255);
+//        ofCircle(0,0,50);
+//    }
     
     if(bounds.height < 2){
         return;
@@ -56,22 +67,23 @@ void ofxTLDropDownFlags::draw(){
         ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
         if(isKeyframeIsInBounds(key)){
             int screenX = millisToScreenX(key->time);
-            
-            ofSetColor(timeline->getColors().backgroundColor);
             int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
-            key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
-                                       textHeight-10, 180, 30);
-            ofRect(key->display);
             
-            ofSetColor(timeline->getColors().textColor);
+//            ofSetColor(timeline->getColors().backgroundColor);
+//            key->display = ofRectangle(MIN(screenX+3, bounds.getMaxX() - key->textField.bounds.width),
+//                                       textHeight-10, 180, 30);
+//            ofRect(key->display);
+//            
+//            ofSetColor(timeline->getColors().textColor);
             
-            key->textField.bounds.x = key->display.x;
-            key->textField.bounds.y = key->display.y;
-            key->textField.draw();
+            int x = MIN(screenX+3, bounds.getMaxX());// - key->textField.bounds.width);
+            int y = textHeight - 10;
+
+            //key->textField.draw();
             
             
             //DatGUI
-            key->menu->setPosition(key->display.x,key->display.y);
+            key->menu->setPosition(x,y);
             key->menu->draw();
             
 
@@ -80,114 +92,206 @@ void ofxTLDropDownFlags::draw(){
     ofPopStyle();
 }
 
+void ofxTLDropDownFlags::mouseMoved(ofMouseEventArgs& args, long millis)
+{
+    
+}
+
+
 //main function to get values out of the timeline, operates on the given value range
-bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis){
+bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
+{
+    
+    ofxTLDropDownFlag* key = NULL;
+    
+    if(active)
+    {
+        /////////////////
+        // GET STATE
+        /////////////////
+        // IS ANY DROPDOWIN IN FOCUS ? (the main button) ?
+        /////////////////
+        int whichIsInFocus = -1;
+        whichIsInFocus = isAnyDropDownInFocus();
+        
+        /////////////////
+        // IS ANY OPTION IN THE DROPDOWN IN FOCUS
+        /////////////////
+        int aChildrenIsFocused = -1;
+        {
+            for(int i = 0; i < keyframes.size(); i++)
+            {
+                key = (ofxTLDropDownFlag*)keyframes[i];
+                
+                int childrenInFocus = isAnyOptionInFocus(key);
+                
+                // false ! ..> // 0 is the top button of the dropdown ... do not consider it .. it's the father not a children.
+                if (childrenInFocus >= 0 )
+                {
+                    aChildrenIsFocused = i;
+                }
+            }
+        }
+        
+        // if clicked on the dropdown button ...
+        if(whichIsInFocus!=-1)
+        {
+            key = (ofxTLDropDownFlag*)keyframes[whichIsInFocus];
+            
+            if(key->menu->getIsExpanded())
+            {
+                // the dropdown is expanded yet .... so we might dismiss modal
+                cout << " we are expanded ... dropdown should colapse ? DISMISSED MODAL !!  " << whichIsInFocus << " _ A Children in Focus ? : " << aChildrenIsFocused << endl;
+                //key->menu->collapse();
+                timeline->dismissedModalContent();
+            }
+            else
+            {
+                // the dropdown is already expanded .... so we present modal
+                cout << "we're collapsed ... some dropdown is in focus so ... PRESENT MODAL" << endl;
+                timeline->presentedModalContent(this);
+            }
+            
+        }
+        
+        if(aChildrenIsFocused!=-1)
+        {
+            key = (ofxTLDropDownFlag*)keyframes[aChildrenIsFocused];
+            // the gui might be expanded ...
+            if(key->menu->getIsExpanded())
+            {
+                cout << "we clicked over a dropdown option .... so we need to collapse" << endl;
+                //key->menu->collapse();
+                timeline->dismissedModalContent();
+            }
+        }
+    
+        if ( ( whichIsInFocus==-1) && (aChildrenIsFocused==-1) )
+        {
+             ofxTLBangs::mousePressed(args, millis);
+        }
+    }// if active
+        
+}// end
+    
     
     //if we aren't entering text and someone has the shift key held down don't let us go into modal
     //    if(!enteringText && ofGetModifierSelection()){
     //        return ofxTLBangs::mousePressed(args, millis);
     //    }
-    
-    clickedTextField = NULL;
-    //look at each keyframe to see if a text field was clicked
-    for(int i = 0; i < keyframes.size(); i++){
-        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
-        if(key->display.inside(args.x, args.y)){
-            clickedTextField = key;
-            break;
-        }
-    }
-    
+    //
+    //    clickedTextField = NULL;
+    //    //look at each keyframe to see if a text field was clicked
+    //    for(int i = 0; i < keyframes.size(); i++)
+    //    {
+    //        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+    //
+    //        //try to know if you're clicking an option of the DropDown ...
+    //        bool dropDownIsInFocus = key->menu->getFocused();
+    //        if (dropDownIsInFocus) cout << "DropDownIsInFocus" << endl;
+    //
+    //
+    //        if(key->display.inside(args.x, args.y)){
+    //            clickedTextField = key;
+    //            break;
+    //        }
+    //
+    //    }
+
     //	cout << "text field? " << (clickedTextField == NULL ? "NULL" : clickedTextField->textField.text) << endl;
     //if so, select that text field and key and present modally
     //so that keyboard input all goes to the text field.
     //selection model is designed so that you can type into
     //mulitple fields at once
-    if(clickedTextField != NULL)
-    {
-        cout << " PRESENT MODAL" << endl;
-        timeline->presentedModalContent(this);
-        enteringText=true;
-        
-        
-//        cout << " a textfiled was pressed ... present MODAL !! " << endl;
-//        // !!!!!!!!!!!!!!!!!!!!!
-//        timeline->presentedModalContent(this);
-//        // !!!!!!!!!!!!!!!!!!!!!
-//        if(!ofGetModifierSelection())
-//        {
-//            cout << " no modifer key so unselectAll!! " << endl;
-//
-//            timeline->unselectAll();
-//        }
-//        
-//        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing())
-//        {
-//            // is SHIFT and we where editing ... end editing !!
-//            clickedTextField->textField.endEditing();
-//        }
-//        else{
-//            cout << " text field BEGIN EDIT !! and select the keyframe as we're editing it !! " << endl;
-//
-//            clickedTextField->textField.beginEditing();
-//            enteringText = true;
-//            //make sure this key is selected
-//            selectKeyframe(clickedTextField);
-//        }
-//        return false;
-    }
-    else
-    {
-        cout << " DISMISSED MODAL" << endl;
-        timeline->dismissedModalContent();
-        enteringText = false;
-        
-//        if(enteringText && !isHovering())
-//        {
-//            for(int i = 0; i < selectedKeyframes.size(); i++){
-//                ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
-//            }
-//            enteringText = false;
-//            // DIMISS MODAL CONTENT !! 
-//            timeline->dismissedModalContent();
-//            cout << " mouse Press :: dismissing MODAL # # #  !!! " << endl;
-//
-//        }
-    }
     
-    if(!enteringText)
-    {
-        //if we get all the way here we didn't click on a text field and we aren't
-        //currently entering text so proceed as normal
-        return ofxTLBangs::mousePressed(args, millis);
-    }
-    return false;
-}
+    //    if(clickedTextField != NULL)
+    //    {
+    //        cout << " PRESENT MODAL" << endl;
+    //        timeline->presentedModalContent(this);
+    //        enteringText=true;
+    
+    
+    
+    //        cout << " a textfiled was pressed ... present MODAL !! " << endl;
+    //        // !!!!!!!!!!!!!!!!!!!!!
+    //        timeline->presentedModalContent(this);
+    //        // !!!!!!!!!!!!!!!!!!!!!
+    //        if(!ofGetModifierSelection())
+    //        {
+    //            cout << " no modifer key so unselectAll!! " << endl;
+    //
+    //            timeline->unselectAll();
+    //        }
+    //
+    //        if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing())
+    //        {
+    //            // is SHIFT and we where editing ... end editing !!
+    //            clickedTextField->textField.endEditing();
+    //        }
+    //        else{
+    //            cout << " text field BEGIN EDIT !! and select the keyframe as we're editing it !! " << endl;
+    //
+    //            clickedTextField->textField.beginEditing();
+    //            enteringText = true;
+    //            //make sure this key is selected
+    //            selectKeyframe(clickedTextField);
+    //        }
+    //        return false;
+    //    }
+    
+    
+    //        if(enteringText && !isHovering())
+    //        {
+    //            for(int i = 0; i < selectedKeyframes.size(); i++){
+    //                ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
+    //            }
+    //            enteringText = false;
+    //            // DIMISS MODAL CONTENT !!
+    //            timeline->dismissedModalContent();
+    //            cout << " mouse Press :: dismissing MODAL # # #  !!! " << endl;
+    //
+    //        }
+    
+    
+    //    if(!enteringText)
+    //    {
+    //        //if we get all the way here we didn't click on a text field and we aren't
+    //        //currently entering text so proceed as normal
+    //        return ofxTLBangs::mousePressed(args, millis);
+    //    }
+    //    return false;
+
+
 
 void ofxTLDropDownFlags::mouseDragged(ofMouseEventArgs& args, long millis){
     if(!enteringText){
         ofxTLBangs::mouseDragged(args, millis);
     }
+    
+
 }
 
 //if we didn't click on a text field and we are entering txt
 //take off the typing mode. Hitting enter will also do this
 void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
-    if(enteringText)
+
+    if(false)
+//        if(enteringText)
     {
         //if we clicked outside of the rect, definitely deslect everything
         if(clickedTextField == NULL && !ofGetModifierSelection()){
             for(int i = 0; i < selectedKeyframes.size(); i++)
             {
-                ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
+                //((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.endEditing();
             }
             enteringText = false;
         }
         //otherwise check if still have a selection
         else{
-            enteringText = false;
-            for(int i = 0; i < selectedKeyframes.size(); i++){
-                enteringText = enteringText || ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.getIsEditing();
+            //enteringText = false;
+            //for(int i = 0; i < selectedKeyframes.size(); i++)
+            {
+                //enteringText = enteringText || ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.getIsEditing();
             }
         }
         
@@ -203,7 +307,8 @@ void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
 
 void ofxTLDropDownFlags::keyPressed(ofKeyEventArgs& args){
     
-    if(enteringText){
+//    if(enteringText){
+        if(false){
         //enter key submits the values
         //This could be done be responding to the event from the text field itself...
         if(args.key == OF_KEY_RETURN){
@@ -220,34 +325,34 @@ void ofxTLDropDownFlags::keyPressed(ofKeyEventArgs& args){
 
 ofxTLKeyframe* ofxTLDropDownFlags::newKeyframe(){
     ofxTLDropDownFlag* key = new ofxTLDropDownFlag();
-    key->textField.setFont(timeline->getFont());
     return key;
 }
 
 void ofxTLDropDownFlags::unselectAll(){
-    for(int i = 0; i < selectedKeyframes.size(); i++){
-        ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.disable();
-    }
+//    for(int i = 0; i < selectedKeyframes.size(); i++){
+//        ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.disable();
+//    }
     ofxTLKeyframes::unselectAll();
 }
 
 void ofxTLDropDownFlags::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
     ofxTLDropDownFlag* triggerKey = (ofxTLDropDownFlag*)key;
-    triggerKey->textField.text = xmlStore.getValue("flag", "");
+    triggerKey->menu->select(xmlStore.getValue("option",0));
 }
 
 void ofxTLDropDownFlags::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
     ofxTLDropDownFlag* triggerKey = (ofxTLDropDownFlag*)key;
-    xmlStore.addValue("flag", triggerKey->textField.text);
+    //xmlStore.addValue("flag", triggerKey->textField.text);
+    xmlStore.addValue("option", triggerKey->menu->getSelectedIndex());
 }
 
 void ofxTLDropDownFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
     ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyframe;
-    if(flag->textField.getIsEditing()){
-        timeline->dismissedModalContent();
-        timeline->flagTrackModified(this);
-    }
-    flag->textField.disable();
+//    if(flag->textField.getIsEditing()){
+//        timeline->dismissedModalContent();
+//        timeline->flagTrackModified(this);
+//    }
+//    flag->textField.disable();
 }
 
 void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
@@ -260,7 +365,7 @@ void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
     args.currentPercent = timeline->getPercentComplete();
     args.currentFrame = timeline->getCurrentFrame();
     args.currentTime = timeline->getCurrentTime();
-    args.flag = ((ofxTLDropDownFlag*)key)->textField.text;
+    args.flag = ((ofxTLDropDownFlag*)key)->menu->getSelectedIndex();
     ofNotifyEvent(events().bangFired, args);
 }
 
@@ -269,10 +374,11 @@ string ofxTLDropDownFlags::getTrackType(){
 }
 
 void ofxTLDropDownFlags::addFlag(string key) {
-    addFlagAtTime(key, timeline->getCurrentTimeMillis());
+//    addFlagAtTime(key, timeline->getCurrentTimeMillis());
 }
 
 void ofxTLDropDownFlags::addFlagAtTime(string key, unsigned long long time){
+/*
     //	cout << "***ADDING FLAG WITH TIME " << time << endl;
     if(time > 2000000){
         cout << "***UNITITED VAR " << time << endl;
@@ -281,20 +387,21 @@ void ofxTLDropDownFlags::addFlagAtTime(string key, unsigned long long time){
     ofxTLKeyframe* keyFrame = newKeyframe();
     ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyFrame;
     setKeyframeTime(keyFrame, time);
-    flag->textField.text = key;
+//    flag->textField.text = key;
     keyframes.push_back(keyFrame);
     updateKeyframeSort();
     timeline->flagTrackModified(this);
-}
+*/
+ }
 
 ofxTLDropDownFlag* ofxTLDropDownFlags::getFlagWithKey(string key){
-    for(int i = 0; i < keyframes.size(); i++){
-        ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyframes[i];
-        if( flag->textField.text == key ){
-            return flag;
-        }
-    }
-    return NULL;
+//    for(int i = 0; i < keyframes.size(); i++){
+//        ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyframes[i];
+////        if( flag->textField.text == key ){
+////            return flag;
+////        }
+//    }
+//    return NULL;
 }
 
 void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
@@ -304,14 +411,77 @@ void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
 
 void ofxTLDropDownFlags::update()
 {
+//    if (enteringText) cout << "TLDropDown :: Editing Text : " << ofGetElapsedTimef() << endl;
     for(int i = keyframes.size()-1; i >= 0; i--)
     {
         ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
         if(isKeyframeIsInBounds(key))
         {
-            key->menu->update();
+            key->menu->update(true);
+            /*
+            if(timeline->isModal())
+            {
+                key->menu->update(true);
+            }
+            else
+            {
+                key->menu->update(false);
+            }
+             */
         }
     }
 }
 
 
+
+void ofxTLDropDownFlags::collapseAllFlags()
+{
+    for(int i = 0; i < keyframes.size(); i++)
+    {
+        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        key->menu->collapse();
+    }
+}
+
+
+int ofxTLDropDownFlags::isAnyOptionInFocus(ofxTLDropDownFlag* key)
+{
+    int res = -11;
+    
+    //try to know if you're clicking an option of the DropDown ...
+    bool dropDownIsInFocus = key->menu->getFocused();
+    //if (dropDownIsInFocus) cout << "Menu DropDown Is In Focus ?? here ??" << ofGetElapsedTimef() <<endl;
+    
+    for(int i=0;i<key->menu->children.size();i++)
+    {
+        bool childrenFocus = key->menu->getChildAt(i)->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
+        if (childrenFocus)
+        {
+            res = i;
+            //cout << "Children  DropDown Is In Focus :: " << i << " :: " << res << " :: " << ofGetElapsedTimef() <<  endl;
+        }
+        
+    }
+    //cout << "res = " << res << endl;
+    return res;
+}
+
+int ofxTLDropDownFlags::isAnyDropDownInFocus()
+{
+    int result=-1;
+
+    for(int i = 0; i < keyframes.size(); i++)
+    {
+        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        bool dropDownIsInFocus = key->menu->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
+        
+        if (dropDownIsInFocus)
+        {
+            //cout << "Menu DropDown Is In Focus" << ofGetElapsedTimef() <<endl;
+            result = i;
+        }
+
+    }
+    
+    return result;
+}
