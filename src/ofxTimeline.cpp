@@ -43,10 +43,10 @@ bool headersort(ofxTLTrackHeader* a, ofxTLTrackHeader* b){
 	return a->getDrawRect().y < b->getDrawRect().y;
 }
 
-#define TAB_HEIGHT 18
-#define TICKER_HEIGHT 27
-#define ZOOMER_HEIGHT 14
-#define INOUT_HEIGHT 7
+#define TAB_HEIGHT 30
+#define TICKER_HEIGHT 30
+#define ZOOMER_HEIGHT 30
+#define INOUT_HEIGHT 15
 
 ofxTimeline::ofxTimeline()
 :	width(1024),

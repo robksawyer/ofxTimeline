@@ -75,7 +75,7 @@ ofxTLPage::~ofxTLPage(){
 void ofxTLPage::setup(){
 	if(!isSetup){
         isSetup = true;
-        headerHeight = 18;
+        headerHeight = 25;
         defaultTrackHeight = 40;
         loadTrackPositions(); //name must be set
         ofAddListener(timeline->events().zoomEnded, this, &ofxTLPage::zoomEnded);
@@ -116,6 +116,7 @@ void ofxTLPage::setTicker(ofxTLTicker* t){
 void ofxTLPage::update(){
 	for(int i = 0; i < headers.size(); i++){
 		tracks[headers[i]->name]->update();
+        headers[i]->update();
 	}
 }
 

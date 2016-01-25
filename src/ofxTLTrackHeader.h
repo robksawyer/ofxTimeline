@@ -37,7 +37,7 @@
 #include "ofxTextInputField.h"
 #include "ofxDatGui.h"
 
-#define FOOTER_HEIGHT 6
+#define FOOTER_HEIGHT 16
 
 class ofxTLTrackHeader : public ofxTLTrack
 {
@@ -49,6 +49,7 @@ class ofxTLTrackHeader : public ofxTLTrack
     
     virtual void enable();
     virtual void disable();
+    virtual void update();
     
 	virtual void draw();
 	virtual void mousePressed(ofMouseEventArgs& args);
@@ -71,7 +72,6 @@ class ofxTLTrackHeader : public ofxTLTrack
   protected:
 	ofxTLTrack* track;
 	ofxTextInputField nameField;
-    //ofxDatGuiLabel    nameField;
 	
 	float footerHeight;
 	void recalculateFooter();
@@ -86,6 +86,12 @@ class ofxTLTrackHeader : public ofxTLTrack
 	void recalculateFooterStripes();
 	float footerStripeWidth;
 	ofPath footerStripes;
+    
+//    ofxDatGui* gui;
+    ofxDatGuiToggle* trackNameToggle;
+    ofxDatGuiTextInput* trackOscAddress;
+
+
 	
 };
 

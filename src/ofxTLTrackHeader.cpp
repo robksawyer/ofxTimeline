@@ -38,6 +38,18 @@ ofxTLTrackHeader::ofxTLTrackHeader(){
 	draggingSize = false;
 	hoveringFooter = false;
 	footerHeight = FOOTER_HEIGHT;
+
+    //trackName = new ofxDatGuiLabel("TRACK'S NAME");
+    //trackName->setLabel("TRACK NAME");
+
+//    gui = new ofxDatGui();
+//    gui->setWidth(150);
+//    gui->setOpacity(0.0);
+    
+    trackNameToggle = new ofxDatGuiToggle("TEST TOGGLE",true);
+    trackNameToggle->setWidth(150);
+    trackOscAddress = new ofxDatGuiTextInput("OSC Addr :");
+    trackOscAddress->setWidth(250,90);
 }
 
 ofxTLTrackHeader::~ofxTLTrackHeader(){
@@ -157,6 +169,15 @@ void ofxTLTrackHeader::draw(){
 		}
 	}
 	ofPopStyle();
+    
+    // DATGUI
+    
+    ofSetColor(255);
+    //gui->setPosition(bounds.x,bounds.y);
+    trackNameToggle->draw();
+    trackOscAddress->draw();
+    //trackOscAddress->setPosition(bounds.x + gui->getWidth(),bounds.y);
+    
 }
 
 void ofxTLTrackHeader::recalculateFooterStripes(){
@@ -224,4 +245,17 @@ void ofxTLTrackHeader::mouseReleased(ofMouseEventArgs& args){
 
 ofRectangle ofxTLTrackHeader::getFooterRect(){
 	return footerRect;
+}
+
+void ofxTLTrackHeader::update()
+{
+    trackNameToggle->setPosition(bounds.x,bounds.y);
+    trackNameToggle->setLabel(track->getDisplayName());
+
+    trackNameToggle->update();
+    
+    trackOscAddress->setPosition(trackNameToggle->getX()+150,bounds.y);
+    trackOscAddress->update();
+    
+    ofxTLTrack::update();
 }
