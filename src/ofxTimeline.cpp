@@ -121,9 +121,12 @@ void ofxTimeline::setup(){
     //TODO: error if isSetup...
     
 	isSetup = true;
-	
 	width = ofGetWidth();
-    if(tabs != NULL){
+    
+    /// TABS
+    /////////////
+    if(tabs != NULL)
+    {
         delete tabs;
     }
 	tabs = new ofxTLPageTabs();
@@ -131,6 +134,8 @@ void ofxTimeline::setup(){
 	tabs->setup();
 	tabs->setDrawRect(ofRectangle(offset.x, offset.y, width, TAB_HEIGHT));
 
+    /// IN OUT
+    /////////////
 	if(inoutTrack != NULL){
 		delete inoutTrack;
 	}
@@ -138,6 +143,8 @@ void ofxTimeline::setup(){
     inoutTrack->setTimeline(this);
     inoutTrack->setDrawRect(ofRectangle(offset.x, tabs->getBottomEdge(), width, INOUT_HEIGHT));
     
+    /// TICKER
+    /////////////
 	if(ticker != NULL){
 		delete ticker;
 	}
@@ -147,7 +154,10 @@ void ofxTimeline::setup(){
     //TODO: save ticker playhead position
 	ticker->setup();
 	ticker->setDrawRect(ofRectangle(offset.x, inoutTrack->getBottomEdge(), width, TICKER_HEIGHT));
-	if(zoomer != NULL){
+
+    /// ZOOMER
+    /////////////
+    if(zoomer != NULL){
 		delete zoomer;
 	}
 	zoomer = new ofxTLZoomer();
@@ -1068,7 +1078,7 @@ ofVec2f ofxTimeline::getBottomRight(){
 
 void ofxTimeline::updatePagePositions(){
 	if(isSetup){
-		ofVec2f pageOffset = ofVec2f(offset.x, ticker->getBottomEdge());
+		ofVec2f pageOffset = ofVec2f(offset.x, zoomer->getBottomEdge());
 		for(int i = 0; i < pages.size(); i++){
 			pages[i]->setContainer(pageOffset, width);
 		}
@@ -1440,13 +1450,23 @@ void ofxTimeline::recalculateBoundingRects(){
     
     inoutTrack->setDrawRect( ofRectangle(offset.x, tabs->getBottomEdge(), width, showInoutControl ? INOUT_HEIGHT : 0) );
     ticker->setDrawRect( ofRectangle(offset.x, inoutTrack->getBottomEdge(), width, showTicker ? TICKER_HEIGHT : 0) );
+    zoomer->setDrawRect(ofRectangle(offset.x, ticker->getBottomEdge(), width, showZoomer ? ZOOMER_HEIGHT : 0));
+    
     updatePagePositions();
-	zoomer->setDrawRect(ofRectangle(offset.x, currentPage->getBottomEdge(), width, showZoomer ? ZOOMER_HEIGHT : 0));
+    
+    //	zoomer->setDrawRect(ofRectangle(offset.x, currentPage->getBottomEdge(), width, showZoomer ? ZOOMER_HEIGHT : 0));
+
     inoutTrack->setPageRectangle(currentPage->getDrawRect());
-	ofRectangle tickerRect = ofRectangle(offset.x, ticker->getDrawRect().y,
+	
+    ofRectangle tickerRect = ofRectangle(offset.x, ticker->getDrawRect().y,
                                         width, currentPage->getBottomEdge()-ticker->getDrawRect().y);
 	ticker->setTotalDrawRect(tickerRect);		
-	totalDrawRect = ofRectangle(offset.x, offset.y, width, zoomer->getDrawRect().y+zoomer->getDrawRect().height - offset.y);
+	
+    
+//    totalDrawRect = ofRectangle(offset.x, offset.y, width, zoomer->getDrawRect().y+zoomer->getDrawRect().height - offset.y);
+    totalDrawRect = ofRectangle(offset.x, offset.y, width, currentPage->getBottomEdge() - offset.y);
+    
+    
 //    cout << "totalDrawRect : " << totalDrawRect.x << "," << totalDrawRect.y << " , " << totalDrawRect.width << " , " << totalDrawRect.height << endl;
 }
 

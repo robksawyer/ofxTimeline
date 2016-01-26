@@ -46,10 +46,17 @@ ofxTLTrackHeader::ofxTLTrackHeader(){
 //    gui->setWidth(150);
 //    gui->setOpacity(0.0);
     
-    trackNameToggle = new ofxDatGuiToggle("TEST TOGGLE",true);
+    
+    //    ofxDatGuiToggle* trackNameToggle;
+    //    ofxDatGuiTextInput* trackDelay;
+
+    ofxDatGuiToggle* trackNameToggle = new ofxDatGuiToggle("TEST TOGGLE : ",true);
     trackNameToggle->setWidth(150);
-    trackOscAddress = new ofxDatGuiTextInput("OSC Addr :");
-    trackOscAddress->setWidth(250,90);
+//    ofxDatGuiTextInput* trackDelay = new ofxDatGuiTextInput("Delay Ms :");
+//    trackDelay->setWidth(250,90);
+    
+    guiComponents.push_back(trackNameToggle);
+//    guiComponents.push_back(trackDelay);
 }
 
 ofxTLTrackHeader::~ofxTLTrackHeader(){
@@ -174,9 +181,13 @@ void ofxTLTrackHeader::draw(){
     
     ofSetColor(255);
     //gui->setPosition(bounds.x,bounds.y);
-    trackNameToggle->draw();
-    trackOscAddress->draw();
-    //trackOscAddress->setPosition(bounds.x + gui->getWidth(),bounds.y);
+    for(int i=0;i<guiComponents.size();i++)
+    {
+        guiComponents[i]->draw();
+    }
+//    trackNameToggle->draw();
+//    trackDelay->draw();
+//    //trackDelay->setPosition(bounds.x + gui->getWidth(),bounds.y);
     
 }
 
@@ -249,13 +260,18 @@ ofRectangle ofxTLTrackHeader::getFooterRect(){
 
 void ofxTLTrackHeader::update()
 {
-    trackNameToggle->setPosition(bounds.x,bounds.y);
-    trackNameToggle->setLabel(track->getDisplayName());
+    guiComponents[0]->setLabel(track->getDisplayName());
+    
+    for(int i=0;i<guiComponents.size();i++)
+    {
+        guiComponents[i]->setPosition(bounds.x + 150*i,bounds.y);
+        guiComponents[i]->update();
+    }
 
-    trackNameToggle->update();
-    
-    trackOscAddress->setPosition(trackNameToggle->getX()+150,bounds.y);
-    trackOscAddress->update();
-    
+//    trackNameToggle->setPosition(bounds.x,bounds.y);
+//    
+//    trackDelay->setPosition(trackNameToggle->getX()+150,bounds.y);
+//    trackDelay->update();
+//    
     ofxTLTrack::update();
 }

@@ -35,6 +35,7 @@
 #include "ofMain.h"
 #include "ofxTLTrack.h"
 #include "ofxTLTrackHeader.h"
+#include "ofxTLTrackHeaderDropDown.h"
 #include "ofxTLEvents.h"
 
 //typedef struct {

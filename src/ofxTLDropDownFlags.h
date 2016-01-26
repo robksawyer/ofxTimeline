@@ -73,6 +73,8 @@ public:
     ofxDatGuiDropdown* menu;
     ofxDatGuiTheme* theme;
     
+
+    
     
     
     //	virtual ~ofxTLFlag();
@@ -107,6 +109,10 @@ public:
     int isAnyOptionInFocus(ofxTLDropDownFlag* f);
     int isAnyDropDownInFocus();
     
+    // to do : to work out the mouse interaction (now is dirty!)
+    int aChildrenIsFocused;
+    int whichIsInFocus;
+
 protected:
     
     virtual ofxTLKeyframe* newKeyframe();

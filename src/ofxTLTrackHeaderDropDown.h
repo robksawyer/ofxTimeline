@@ -33,67 +33,61 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxTLTrack.h"
-#include "ofxTextInputField.h"
-#include "ofxDatGui.h"
+#include "ofxTLTrackHeader.h"
 
 #define FOOTER_HEIGHT 16
 
-class ofxTLTrackHeader : public ofxTLTrack
+class ofxTLTrackHeaderDropDown : public ofxTLTrackHeader
 {
   public:	
-	ofxTLTrackHeader();
-	virtual ~ofxTLTrackHeader();
+	ofxTLTrackHeaderDropDown();
+	virtual ~ofxTLTrackHeaderDropDown();
 	
-    string name;
-    
-    virtual void enable();
-    virtual void disable();
-    virtual void update();
-    
-	virtual void draw();
-	virtual void mousePressed(ofMouseEventArgs& args);
-	virtual void mouseMoved(ofMouseEventArgs& args);
-	virtual void mouseDragged(ofMouseEventArgs& args);
-	virtual void mouseReleased(ofMouseEventArgs& args);
+//    virtual void enable();
+//    virtual void disable();
+//    virtual void update();
+//    
+//	virtual void draw();
+//	virtual void mousePressed(ofMouseEventArgs& args);
+//	virtual void mouseMoved(ofMouseEventArgs& args);
+//	virtual void mouseDragged(ofMouseEventArgs& args);
+//	virtual void mouseReleased(ofMouseEventArgs& args);
 	
-	virtual void setTrack(ofxTLTrack* track);
-	virtual ofxTLTrack* getTrack();
-    
-	virtual void setFooterHeight(float height);
-	virtual void collapseTrack();
-    
-	virtual ofRectangle getFooterRect();
-	virtual void textFieldEnter(string& newText);
-	
-	//for the header, this returns the track's display name
-    virtual string getDisplayName();
+//	virtual void setTrack(ofxTLTrack* track);
+//	virtual ofxTLTrack* getTrack();
+//    
+//	virtual void setFooterHeight(float height);
+//	virtual void collapseTrack();
+//    
+//	virtual ofRectangle getFooterRect();
+//	virtual void textFieldEnter(string& newText);
+//	
+//	//for the header, this returns the track's display name
+//    virtual string getDisplayName();
 	
   protected:
-	ofxTLTrack* track;
-	ofxTextInputField nameField;
-	
-	float footerHeight;
-	void recalculateFooter();
-	
-	ofRectangle footerRect;
-	
-	bool hoveringFooter;
-	bool draggingSize;
-	float dragOffset;
-	float dragAnchor;
-	
-	void recalculateFooterStripes();
-	float footerStripeWidth;
-	ofPath footerStripes;
-    
-//    ofxDatGui* gui;
-    vector<ofxDatGuiComponent*>     guiComponents;
-
+//	ofxTLTrack* track;
+//	ofxTextInputField nameField;
+//	
+//	float footerHeight;
+//	void recalculateFooter();
+//	
+//	ofRectangle footerRect;
+//	
+//	bool hoveringFooter;
+//	bool draggingSize;
+//	float dragOffset;
+//	float dragAnchor;
+//	
+//	void recalculateFooterStripes();
+//	float footerStripeWidth;
+//	ofPath footerStripes;
+//    
+////    ofxDatGui* gui;
 //    ofxDatGuiToggle* trackNameToggle;
-//    ofxDatGuiTextInput* trackDelay;
-
-
-	
+//    ofxDatGuiTextInput* trackOscAddress;
+//
+//
+//	
 };
 

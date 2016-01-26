@@ -38,6 +38,7 @@
 ofxTLDropDownFlags::ofxTLDropDownFlags() {
     enteringText = false;
     clickedTextField = NULL;
+
 }
 
 void ofxTLDropDownFlags::draw(){
@@ -111,28 +112,34 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
         /////////////////
         // IS ANY DROPDOWIN IN FOCUS ? (the main button) ?
         /////////////////
-        int whichIsInFocus = -1;
+        whichIsInFocus = -1;
         whichIsInFocus = isAnyDropDownInFocus();
         
         /////////////////
         // IS ANY OPTION IN THE DROPDOWN IN FOCUS
         /////////////////
-        int aChildrenIsFocused = -1;
+        aChildrenIsFocused = -1;
+        int childrenInFocus = -2;
+        int whichOptionWasSelected = -3;
+//        cout << "how many keys ? " << keyframes.size() << endl;
+        for(int i = 0; i < keyframes.size(); i++)
         {
-            for(int i = 0; i < keyframes.size(); i++)
+            
+            key = (ofxTLDropDownFlag*)keyframes[i];
+            
+            childrenInFocus = isAnyOptionInFocus(key);
+//            cout << "looking for a chidrenInFocus ... " << childrenInFocus << " and i is ? "<< i << endl;
+            
+            // false ! ..> // 0 is the top button of the dropdown ... do not consider it .. it's the father not a children.
+            if (childrenInFocus >= 0 )
             {
-                key = (ofxTLDropDownFlag*)keyframes[i];
-                
-                int childrenInFocus = isAnyOptionInFocus(key);
-                
-                // false ! ..> // 0 is the top button of the dropdown ... do not consider it .. it's the father not a children.
-                if (childrenInFocus >= 0 )
-                {
-                    aChildrenIsFocused = i;
-                }
+                whichOptionWasSelected = childrenInFocus;
+                aChildrenIsFocused = i;
+//                cout << "assigned aChildrenIsFocused to " << i << endl;
             }
         }
         
+//        cout << "achildrenIsFocused ??????? " << aChildrenIsFocused <<endl;
         // if clicked on the dropdown button ...
         if(whichIsInFocus!=-1)
         {
@@ -141,15 +148,19 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
             if(key->menu->getIsExpanded())
             {
                 // the dropdown is expanded yet .... so we might dismiss modal
-                cout << " we are expanded ... dropdown should colapse ? DISMISSED MODAL !!  " << whichIsInFocus << " _ A Children in Focus ? : " << aChildrenIsFocused << endl;
+//                cout << " we are expanded ... dropdown should colapse ? DISMISSED MODAL !!  " << whichIsInFocus << " _ A Children in Focus ? : " << aChildrenIsFocused << endl;
                 //key->menu->collapse();
                 timeline->dismissedModalContent();
+//                timeline->collectStateBuffers();
+//                getXMLStringForKeyframes(key);
             }
             else
             {
                 // the dropdown is already expanded .... so we present modal
-                cout << "we're collapsed ... some dropdown is in focus so ... PRESENT MODAL" << endl;
+//                cout << "we're collapsed ... some dropdown is in focus so ... PRESENT MODAL" << endl;
                 timeline->presentedModalContent(this);
+
+
             }
             
         }
@@ -160,15 +171,19 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
             // the gui might be expanded ...
             if(key->menu->getIsExpanded())
             {
-                cout << "we clicked over a dropdown option .... so we need to collapse" << endl;
+//                cout << "we clicked over a dropdown option .... so we need to collapse . aChildrenIsInFocus : " << aChildrenIsFocused  << endl;
                 //key->menu->collapse();
                 timeline->dismissedModalContent();
+                key->menu->select(whichOptionWasSelected);
             }
         }
     
         if ( ( whichIsInFocus==-1) && (aChildrenIsFocused==-1) )
         {
-             ofxTLBangs::mousePressed(args, millis);
+             if(!timeline->isModal())
+             {
+                 ofxTLBangs::mousePressed(args, millis);
+             }
         }
     }// if active
         
@@ -301,6 +316,13 @@ void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
         }
     }
     else {
+        
+//        if(aChildrenIsFocused!=-1)
+//        {
+//            save();
+//            cout << "track saved" << endl;
+//        }
+        
         ofxTLBangs::mouseReleased(args, millis);
     }
 }
@@ -343,7 +365,8 @@ void ofxTLDropDownFlags::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xml
 void ofxTLDropDownFlags::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
     ofxTLDropDownFlag* triggerKey = (ofxTLDropDownFlag*)key;
     //xmlStore.addValue("flag", triggerKey->textField.text);
-    xmlStore.addValue("option", triggerKey->menu->getSelectedIndex());
+    int selInd =  triggerKey->menu->getSelectedIndex();
+    xmlStore.addValue("option",selInd);
 }
 
 void ofxTLDropDownFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
@@ -458,7 +481,7 @@ int ofxTLDropDownFlags::isAnyOptionInFocus(ofxTLDropDownFlag* key)
         if (childrenFocus)
         {
             res = i;
-            //cout << "Children  DropDown Is In Focus :: " << i << " :: " << res << " :: " << ofGetElapsedTimef() <<  endl;
+            return res;
         }
         
     }

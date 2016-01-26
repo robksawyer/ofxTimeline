@@ -84,7 +84,8 @@ void ofxTLPage::setup(){
 
 //given a folder the page will look for xml files to load within that
 void ofxTLPage::loadTracksFromFolder(string folderPath){
-    for(int i = 0; i < headers.size(); i++){
+    for(int i = 0; i < headers.size(); i++)
+    {
 		string filename = folderPath + tracks[headers[i]->name]->getXMLFileName();
         tracks[headers[i]->name]->setXMLFileName(filename);
         tracks[headers[i]->name]->load();
@@ -460,43 +461,93 @@ void ofxTLPage::nudgeBy(ofVec2f nudgePercent){
 
 void ofxTLPage::addTrack(string trackName, ofxTLTrack* track){
 
-	ofxTLTrackHeader* newHeader = new ofxTLTrackHeader();
-    newHeader->setTimeline(timeline);
-	newHeader->setTrack(track);
-	newHeader->name = trackName;
-	newHeader->setFooterHeight(footersAreHidden ? 0 : FOOTER_HEIGHT);
-	newHeader->setup();
+    string trackType = track->getTrackType();
+
+    cout << "Track Type : " << trackType << " : Name : " << trackName << endl;
+
+    if(trackType=="DropDownFlags")
+    {
+        // Default track behaviour
+        ofxTLTrackHeaderDropDown* newHeader = new ofxTLTrackHeaderDropDown();
+        newHeader->setTimeline(timeline);
+        newHeader->setTrack(track);
+        newHeader->name = trackName;
+        newHeader->setFooterHeight(footersAreHidden ? 0 : FOOTER_HEIGHT);
+        newHeader->setup();
+        
+        ofRectangle newHeaderRect;
+        if(headersAreMinimal){
+            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, 0);
+        }
+        else{
+            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, headerHeight);
+        }
+        
+        newHeader->setDrawRect(newHeaderRect);
+        
+        
+        track->setup();
+        
+        ofRectangle drawRect;
+        if(savedTrackPositions.find(trackName) != savedTrackPositions.end()){
+            drawRect = savedTrackPositions[trackName];
+        }
+        else {
+            drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
+        }
+        
+        track->setDrawRect(drawRect);
+        track->setZoomBounds(currentZoomBounds);
+        
+        tracks[trackName] = track;
+        trackList.push_back(track);
+        headers.push_back(newHeader);
+        
+    }
+    else if (true)
+    {
+        // Default track behaviour
+        ofxTLTrackHeader* newHeader = new ofxTLTrackHeader();
+        newHeader->setTimeline(timeline);
+        newHeader->setTrack(track);
+        newHeader->name = trackName;
+        newHeader->setFooterHeight(footersAreHidden ? 0 : FOOTER_HEIGHT);
+        newHeader->setup();
+        
+        ofRectangle newHeaderRect;
+        if(headersAreMinimal){
+            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, 0);
+        }
+        else{
+            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, headerHeight);
+        }
+        
+        newHeader->setDrawRect(newHeaderRect);
+        
+        
+        track->setup();
+        
+        ofRectangle drawRect;
+        if(savedTrackPositions.find(trackName) != savedTrackPositions.end()){
+            drawRect = savedTrackPositions[trackName];
+        }
+        else {
+            drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
+        }
+        
+        track->setDrawRect(drawRect);
+        track->setZoomBounds(currentZoomBounds);
+        
+        tracks[trackName] = track;
+        trackList.push_back(track);
+        headers.push_back(newHeader);
+    }
+    
 
 	//	cout << "adding " << name << " current zoomer is " << zoomer->getDrawRect().y << endl;
 
 	
-	ofRectangle newHeaderRect;
-	if(headersAreMinimal){
-		newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, 0);
-	}
-	else{
-		newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, headerHeight);
-	}
-	
-	newHeader->setDrawRect(newHeaderRect);
 
-
-	track->setup();
-	
-	ofRectangle drawRect;
-	if(savedTrackPositions.find(trackName) != savedTrackPositions.end()){
-		drawRect = savedTrackPositions[trackName];
-	}
-	else {
-		drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
-	}
-
-	track->setDrawRect(drawRect);
-	track->setZoomBounds(currentZoomBounds);
-
-	tracks[trackName] = track;
-	trackList.push_back(track);
-	headers.push_back(newHeader);
 
 }
 
