@@ -54,16 +54,27 @@ ofxTLTrackHeaderDropDown::ofxTLTrackHeaderDropDown()
 //    trackOscAddress = new ofxDatGuiTextInput("OSC Addr :");
 //    trackOscAddress->setWidth(250,90);
 
-    ofxDatGuiTextInput* trackDelay = new ofxDatGuiTextInput("Delay Ms :");
+    trackDelay = new ofxDatGuiTextInput("Delay Ms :");
     trackDelay->setWidth(250,90);
     guiComponents.push_back(trackDelay);
 
-    cout << "ofxTLTrackHeaderDropDown creator" << endl;
 }
 
 ofxTLTrackHeaderDropDown::~ofxTLTrackHeaderDropDown(){
 	
 }
+
+
+float ofxTLTrackHeaderDropDown::getTrackDelay()
+{
+    return ofToFloat(trackDelay->getText());
+}
+
+void ofxTLTrackHeaderDropDown::setTrackDelay(float f)
+{
+    trackDelay->setText(ofToString(f));
+}
+
 
 //void ofxTLTrackHeader::enable(){
 //	if(!isEnabled()){

@@ -365,7 +365,11 @@ void ofxTLPage::refreshSnapPoints(){
 		}
 	}
     
-	if(ticker != NULL && timeline->getSnapToBPM()){
+	if(ticker != NULL && timeline->getSnapToBPM())
+    {
+        if(ticker == NULL) cout << "ticker is null" << endl;
+        else cout << "ticker is NOT null" << endl;
+        
 		ticker->getSnappingPoints(snapPoints);
 	}
 	
@@ -463,7 +467,7 @@ void ofxTLPage::addTrack(string trackName, ofxTLTrack* track){
 
     string trackType = track->getTrackType();
 
-    cout << "Track Type : " << trackType << " : Name : " << trackName << endl;
+    cout << "Adding Track Type : " << trackType << " : Name : " << trackName << endl;
 
     if(trackType=="DropDownFlags")
     {
@@ -625,6 +629,7 @@ void ofxTLPage::evenlyDistributeTrackHeights(){
 	float addedHeightPerTrack = 0;
 	if(!headersAreMinimal)addedHeightPerTrack += headerHeight;
 	if(!footersAreHidden) addedHeightPerTrack += FOOTER_HEIGHT;
+    
 	if(heightBeforeCollapse == 0){
 		heightBeforeCollapse = trackContainerRect.height - addedHeightPerTrack*headers.size();
 	}
@@ -641,7 +646,6 @@ void ofxTLPage::evenlyDistributeTrackHeights(){
 		heightBeforeCollapse = 0;
 	}
 
-	cout << endl;
 }
 
 void ofxTLPage::collapseAllTracks(bool excludeFocusTrack){
@@ -792,26 +796,51 @@ float ofxTLPage::getBottomEdge(){
 
 
 #pragma mark saving/restoring state
-void ofxTLPage::loadTrackPositions(){
+void ofxTLPage::loadTrackPositions()
+{
 	ofxXmlSettings trackPositions;
 	string xmlPageName = name;
-	ofStringReplace(xmlPageName," ", "_");
-	string positionFileName = ofToDataPath(timeline->getWorkingFolder() + timeline->getName() + "_" + xmlPageName + "_trackPositions.xml");
-	if(trackPositions.loadFile(positionFileName)){
-		
+	
+    ofStringReplace(xmlPageName," ", "_");
+	
+    string positionFileName = ofToDataPath(timeline->getWorkingFolder() + timeline->getName() + "_" + xmlPageName + "_trackPositions.xml");
+	
+    if(trackPositions.loadFile(positionFileName))
+    {
 		//cout << "loading element position " << name << "_trackPositions.xml" << endl;
-		
 		trackPositions.pushTag("positions");
 		int numtracks = trackPositions.getNumTags("element");
-		for(int i = 0; i < numtracks; i++){
+		for(int i = 0; i < numtracks; i++)
+        {
+            // recovering track name and positions
 			string name = trackPositions.getAttribute("element", "name", "", i);
 			trackPositions.pushTag("element", i);
+            
 			ofRectangle elementPosition = ofRectangle(ofToFloat(trackPositions.getValue("x", "0")),
 													  ofToFloat(trackPositions.getValue("y", "0")),
 													  ofToFloat(trackPositions.getValue("width", "0")),
 													  ofToFloat(trackPositions.getValue("height", "0")));
 			savedTrackPositions[name] = elementPosition;
-			trackPositions.popTag();
+
+            // recovering other qualities
+            string tType = trackPositions.getValue("trackType","y_");
+            string tDelay = trackPositions.getValue("delayMs","y_");
+            
+            cout << "LOAD TRACK FROM PAGE ::  ___ " << name << " , " << tType << " , " << tDelay << endl;
+            if(tType=="DropDownFlags")
+            {
+                ofxTLTrack* t = timeline->getTrack(name);
+                if(t!=NULL)
+                {
+                    ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) getTrackHeader(t);
+                    hd->setTrackDelay(ofToFloat(tDelay));
+                    cout << "setting track : " << name << " a delay of " << tDelay << endl;
+                }
+            }
+            
+            trackPositions.popTag();
+            
+            
 		}
 		trackPositions.popTag();
 	}
@@ -820,19 +849,39 @@ void ofxTLPage::loadTrackPositions(){
 	}
 }
 
-void ofxTLPage::saveTrackPositions(){
+void ofxTLPage::saveTrackPositions()
+{
 	ofxXmlSettings trackPositions;
 	trackPositions.addTag("positions");
 	trackPositions.pushTag("positions");
 	
 	int curElement = 0;
 	map<string, ofRectangle>::iterator it;
-	for(it = savedTrackPositions.begin(); it != savedTrackPositions.end(); it++){
+	for(it = savedTrackPositions.begin(); it != savedTrackPositions.end(); it++)
+    {
 		trackPositions.addTag("element");
 		trackPositions.addAttribute("element", "name", it->first, curElement);
-		
+        
 		trackPositions.pushTag("element", curElement);
-		trackPositions.addValue("x", it->second.x);
+        
+        string trTyp = "kk";
+        ofxTLTrack* t = timeline->getTrack(it->first);
+        
+        if(t!=NULL)
+        {
+            trTyp = timeline->getTrack(it->first)->getTrackType();
+            trackPositions.addValue("trackType",trTyp);
+            
+            if(trTyp=="DropDownFlags")
+            {
+                ofxTLTrackHeader* h = getTrackHeader(t);
+                ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) h;
+                float delay = hd->getTrackDelay();
+                trackPositions.addValue("delayMs",delay);
+            }
+        }
+        
+        trackPositions.addValue("x", it->second.x);
 		trackPositions.addValue("y", it->second.y);
 		trackPositions.addValue("width", it->second.width);
 		trackPositions.addValue("height", it->second.height);
@@ -841,6 +890,7 @@ void ofxTLPage::saveTrackPositions(){
 		
 		curElement++;
 	}
+    
 	trackPositions.popTag();
 	string xmlPageName = name;
 	ofStringReplace(xmlPageName," ", "_");

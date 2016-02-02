@@ -50,7 +50,7 @@ ofxTLTrackHeader::ofxTLTrackHeader(){
     //    ofxDatGuiToggle* trackNameToggle;
     //    ofxDatGuiTextInput* trackDelay;
 
-    ofxDatGuiToggle* trackNameToggle = new ofxDatGuiToggle("TEST TOGGLE : ",true);
+    ofxDatGuiToggle* trackNameToggle = new ofxDatGuiToggle("track name here",true);
     trackNameToggle->setWidth(150);
 //    ofxDatGuiTextInput* trackDelay = new ofxDatGuiTextInput("Delay Ms :");
 //    trackDelay->setWidth(250,90);

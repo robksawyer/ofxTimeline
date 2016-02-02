@@ -1807,7 +1807,23 @@ float ofxTimeline::getValue(string trackName, int atFrame){
     return getValue(trackName, timecode.secondsForFrame(atFrame));
 }
 
-bool ofxTimeline::hasTrack(string trackName){
+bool ofxTimeline::hasTrack(string trackName)
+{
+//    int size = trackNameToPage.size();
+//    cout << "HasTrack? trackNameToPage size " << size << endl;
+//
+    cout << "--------------------" << endl;
+    for (auto x: trackNameToPage)
+    {
+        cout <<"TimelineHasTRack : " << x.first << endl;
+    }
+    cout << "  ................... " << endl;
+//    std::map<string, ofxTLPage>::iterator iter;
+//    for (iter = trackNameToPage->begin(); iter != trackNameToPage->end(); ++iter)
+//    {
+//
+//    }
+    
 	return trackNameToPage.find(trackName) != trackNameToPage.end();
 }
 
@@ -1821,7 +1837,8 @@ bool ofxTimeline::hasPage(string pageName){
 }
 
 ofxTLTrack* ofxTimeline::getTrack(string trackName){
-	if(!hasTrack(trackName)){
+	if(!hasTrack(trackName))
+    {
 		ofLogError("ofxTimeline -- Couldn't find track " + trackName);
 		return NULL;
 	}

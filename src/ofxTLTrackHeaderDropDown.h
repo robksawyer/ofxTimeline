@@ -35,7 +35,6 @@
 #include "ofMain.h"
 #include "ofxTLTrackHeader.h"
 
-#define FOOTER_HEIGHT 16
 
 class ofxTLTrackHeaderDropDown : public ofxTLTrackHeader
 {
@@ -43,6 +42,8 @@ class ofxTLTrackHeaderDropDown : public ofxTLTrackHeader
 	ofxTLTrackHeaderDropDown();
 	virtual ~ofxTLTrackHeaderDropDown();
 	
+    float   getTrackDelay();
+    void    setTrackDelay(float f);
 //    virtual void enable();
 //    virtual void disable();
 //    virtual void update();
@@ -66,6 +67,9 @@ class ofxTLTrackHeaderDropDown : public ofxTLTrackHeader
 //    virtual string getDisplayName();
 	
   protected:
+    
+    ofxDatGuiTextInput* trackDelay;
+    
 //	ofxTLTrack* track;
 //	ofxTextInputField nameField;
 //	
