@@ -1574,6 +1574,14 @@ void ofxTimeline::draw(){
         
 		ofSetColor(255);
 		
+        // ELOI
+        if(modalTrack != NULL){
+            ofBackground(0,0,20);
+        }
+        else{
+            //ofBackground(0,0,0);
+        }
+        
 		if (pages.size() > 1) {
 			tabs->draw();			
 		}

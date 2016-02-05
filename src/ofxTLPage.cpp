@@ -130,7 +130,7 @@ void ofxTLPage::draw(){
 	if(!headerHasFocus && !footerIsDragging && draggingInside && snapPoints.size() > 0)
     {
 		ofPushStyle();
-		ofSetColor(255,255,255,100);
+		ofSetColor(255,128,0,100);
 		set<unsigned long long>::iterator it;
 //		for(int i = 0; i < snapPoints.size(); i++){
 		for(it = snapPoints.begin(); it != snapPoints.end(); it++){
@@ -167,7 +167,8 @@ void ofxTLPage::timelineLostFocus(){
 }
 
 #pragma mark events
-void ofxTLPage::mousePressed(ofMouseEventArgs& args, long millis){
+void ofxTLPage::mousePressed(ofMouseEventArgs& args, long millis)
+{
 	draggingInside = trackContainerRect.inside(args.x, args.y);
     draggingSelectionRectangle = false;
 	ofxTLTrack* newFocus = NULL;
@@ -185,8 +186,10 @@ void ofxTLPage::mousePressed(ofMouseEventArgs& args, long millis){
 			if(headerHasFocus){
 				headers[i]->mousePressed(args);
 			}
-            if(clickIsInTrack || clickIsInHeader || justMadeSelection){
+            if(clickIsInTrack || clickIsInHeader || justMadeSelection || clickIsInFooter)
+            {
                 newFocus = tracks[ headers[i]->name ];
+                break;
             }
 		}
 		
@@ -367,9 +370,9 @@ void ofxTLPage::refreshSnapPoints(){
     
 	if(ticker != NULL && timeline->getSnapToBPM())
     {
-        if(ticker == NULL) cout << "ticker is null" << endl;
-        else cout << "ticker is NOT null" << endl;
-        
+//        if(ticker == NULL) cout << "ticker is null" << endl;
+//        else cout << "ticker is NOT null" << endl;
+//        
 		ticker->getSnappingPoints(snapPoints);
 	}
 	

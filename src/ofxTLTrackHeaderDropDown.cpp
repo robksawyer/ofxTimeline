@@ -56,7 +56,7 @@ ofxTLTrackHeaderDropDown::ofxTLTrackHeaderDropDown()
 
     trackDelay = new ofxDatGuiTextInput("Delay Ms :");
     trackDelay->setWidth(250,90);
-    guiComponents.push_back(trackDelay);
+//    guiComponents.push_back(trackDelay);
 
 }
 

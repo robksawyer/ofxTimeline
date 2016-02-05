@@ -388,8 +388,20 @@ void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
     args.currentPercent = timeline->getPercentComplete();
     args.currentFrame = timeline->getCurrentFrame();
     args.currentTime = timeline->getCurrentTime();
-    args.flag = ((ofxTLDropDownFlag*)key)->menu->getSelectedIndex();
+    
+    // in flags was :
+    //args.flag = ((ofxTLFlag*)key)->textField.text;
+
+    //args.flag = ((ofxTLDropDownFlag*)key)->menu->getSelectedIndex();
+    
+    string selectedLabel;
+    ofxDatGuiDropdown* fl = ((ofxTLDropDownFlag*)key)->menu;
+    selectedLabel = fl->getSelected()->getLabel();
+    args.flag = selectedLabel;
+    
+    
     ofNotifyEvent(events().bangFired, args);
+    
 }
 
 string ofxTLDropDownFlags::getTrackType(){
@@ -434,6 +446,8 @@ void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
 
 void ofxTLDropDownFlags::update()
 {
+    ofxTLBangs::update();
+    
 //    if (enteringText) cout << "TLDropDown :: Editing Text : " << ofGetElapsedTimef() << endl;
     for(int i = keyframes.size()-1; i >= 0; i--)
     {

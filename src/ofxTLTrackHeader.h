@@ -87,12 +87,6 @@ class ofxTLTrackHeader : public ofxTLTrack
 	float footerStripeWidth;
 	ofPath footerStripes;
     
-//    ofxDatGui* gui;
-    vector<ofxDatGuiComponent*>     guiComponents;
-
-//    ofxDatGuiToggle* trackNameToggle;
-//    ofxDatGuiTextInput* trackDelay;
-
 
 	
 };

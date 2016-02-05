@@ -119,7 +119,8 @@ void ofxTLTrack::_draw(){
 	
 	if(focused){
 		ofFill();
-		ofSetColor(timeline->getColors().highlightColor, 50);
+//		ofSetColor(timeline->getColors().highlightColor, 50);
+        ofSetColor(255,255,255,30);
 		ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	

@@ -395,7 +395,8 @@ int ofxTLAudioTrack::getFFTSize(){
 
 //envelope and dampening approach from Marius Watz
 //http://workshop.evolutionzone.com/2012/08/30/workshops-sept-89-sound-responsive-visuals-3d-printing-and-parametric-modeling/
-vector<float>& ofxTLAudioTrack::getFFT(){
+vector<float>& ofxTLAudioTrack::getFFT()
+{
 	float fftPosition = player.getPosition();
 	if(isSoundLoaded() && lastFFTPosition != fftPosition){
 

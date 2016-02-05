@@ -39,24 +39,7 @@ ofxTLTrackHeader::ofxTLTrackHeader(){
 	hoveringFooter = false;
 	footerHeight = FOOTER_HEIGHT;
 
-    //trackName = new ofxDatGuiLabel("TRACK'S NAME");
-    //trackName->setLabel("TRACK NAME");
-
-//    gui = new ofxDatGui();
-//    gui->setWidth(150);
-//    gui->setOpacity(0.0);
     
-    
-    //    ofxDatGuiToggle* trackNameToggle;
-    //    ofxDatGuiTextInput* trackDelay;
-
-    ofxDatGuiToggle* trackNameToggle = new ofxDatGuiToggle("track name here",true);
-    trackNameToggle->setWidth(150);
-//    ofxDatGuiTextInput* trackDelay = new ofxDatGuiTextInput("Delay Ms :");
-//    trackDelay->setWidth(250,90);
-    
-    guiComponents.push_back(trackNameToggle);
-//    guiComponents.push_back(trackDelay);
 }
 
 ofxTLTrackHeader::~ofxTLTrackHeader(){
@@ -120,8 +103,10 @@ void ofxTLTrackHeader::draw(){
 	
 	if(track->hasFocus()){
 		ofFill();
-		ofSetColor(timeline->getColors().highlightColor, 50);
+		//ofSetColor(timeline->getColors().highlightColor, 50);
+        ofSetColor(255,255,255,20);
 		ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
 	}
 
 	// TODO: set these somewhere else instead of setting it every frame here
@@ -155,7 +140,7 @@ void ofxTLTrackHeader::draw(){
 
 	ofSetColor(track->getTimeline()->getColors().outlineColor);
     ofFill();
-    ofSetColor(255,255,255,200);
+    ofSetColor(255,0,0,5);
 	ofRect(bounds);
 
     ofSetColor(track->getTimeline()->getColors().textColor);
@@ -176,19 +161,7 @@ void ofxTLTrackHeader::draw(){
 		}
 	}
 	ofPopStyle();
-    
-    // DATGUI
-    
-    ofSetColor(255);
-    //gui->setPosition(bounds.x,bounds.y);
-    for(int i=0;i<guiComponents.size();i++)
-    {
-        guiComponents[i]->draw();
-    }
-//    trackNameToggle->draw();
-//    trackDelay->draw();
-//    //trackDelay->setPosition(bounds.x + gui->getWidth(),bounds.y);
-    
+        
 }
 
 void ofxTLTrackHeader::recalculateFooterStripes(){
@@ -260,18 +233,5 @@ ofRectangle ofxTLTrackHeader::getFooterRect(){
 
 void ofxTLTrackHeader::update()
 {
-    guiComponents[0]->setLabel(track->getDisplayName());
-    
-    for(int i=0;i<guiComponents.size();i++)
-    {
-        guiComponents[i]->setPosition(bounds.x + 150*i,bounds.y);
-        guiComponents[i]->update();
-    }
-
-//    trackNameToggle->setPosition(bounds.x,bounds.y);
-//    
-//    trackDelay->setPosition(trackNameToggle->getX()+150,bounds.y);
-//    trackDelay->update();
-//    
     ofxTLTrack::update();
 }
