@@ -107,7 +107,7 @@ void ofxTLKeyframes::draw(){
 	
 	//draw current value indicator as a big transparent rectangle
 	ofSetColor(timeline->getColors().disabledColor, 30);
-	//jg play solo change
+	//TODO:? play solo change
 	//float currentPercent = sampleAtTime(timeline->getCurrentTimeMillis());
 	float currentPercent = sampleAtTime(currentTrackTime());
 	ofFill();
@@ -145,10 +145,24 @@ void ofxTLKeyframes::draw(){
 		if(isKeyframeIsInBounds(selectedKeyframes[i])){
 			ofVec2f screenpoint = screenPositionForKeyframe(selectedKeyframes[i]);
 			float keysValue = ofMap(selectedKeyframes[i]->value, 0, 1.0, valueRange.min, valueRange.max, true);
-			if(keysAreDraggable){
+			if(keysAreDraggable)
+            {
 				string frameString = timeline->formatTime(selectedKeyframes[i]->time);
-				timeline->getFont().drawString(ofToString(keysValue, 4), screenpoint.x+5, screenpoint.y-5);
-			}
+                float halfY = (bounds.y + bounds.height/2);
+                float vOffset,hOffset;
+                if(screenpoint.y<halfY)
+                {
+                    vOffset = 10;
+                    hOffset = 20;
+                }
+                else
+                {
+                    vOffset = -10;
+                    hOffset = 10;
+                }
+                timeline->getFont().drawString(ofToString(keysValue, 4), screenpoint.x+hOffset, screenpoint.y+vOffset);
+
+            }
 			ofCircle(screenpoint.x, screenpoint.y, 4);
 		}
 	}

@@ -48,17 +48,17 @@ ofxTLTrackHeader::~ofxTLTrackHeader(){
 
 void ofxTLTrackHeader::enable(){
 	if(!isEnabled()){
-		nameField.setFont(timeline->getFont());
+//		nameField.setFont(timeline->getFont());
 		ofxTLTrack::enable();
-    	ofAddListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
+//    	ofAddListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
 	}
 }
 
 void ofxTLTrackHeader::disable(){
 	if(isEnabled()){
 		ofxTLTrack::disable();
-		nameField.disable();
-	    ofRemoveListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
+//		nameField.disable();
+//	    ofRemoveListener(nameField.textChanged, this, &ofxTLTrackHeader::textFieldEnter);
 	}
 }
 
@@ -70,18 +70,18 @@ ofxTLTrack* ofxTLTrackHeader::getTrack(){
 	return track;    
 }
 
-void ofxTLTrackHeader::textFieldEnter(string& newText){
-
-    if(newText == ""){
-        nameField.text = name;
-    }
-    else{
-        if(track != NULL){
-            track->setDisplayName(newText);
-        }
-    }
-	track->getTimeline()->dismissedModalContent();
-}
+//void ofxTLTrackHeader::textFieldEnter(string& newText){
+//
+//    if(newText == ""){
+//        nameField.text = name;
+//    }
+//    else{
+//        if(track != NULL){
+//            track->setDisplayName(newText);
+//        }
+//    }
+//	track->getTimeline()->dismissedModalContent();
+//}
 
 string ofxTLTrackHeader::getDisplayName(){
 	if(track != NULL){
@@ -95,9 +95,9 @@ void ofxTLTrackHeader::draw(){
 
 	float footerStartY = trackRect.y + trackRect.height;
 	footerRect = ofRectangle(bounds.x, footerStartY, bounds.width, footerHeight);
-	if(footerRect.width != footerStripeWidth){
-		recalculateFooterStripes();
-	}
+//	if(footerRect.width != footerStripeWidth){
+//		recalculateFooterStripes();
+//	}
 	
 	ofPushStyle();
 	
@@ -111,25 +111,25 @@ void ofxTLTrackHeader::draw(){
 
 	// TODO: set these somewhere else instead of setting it every frame here
     // set name if it's empty and we're not editing
-    if(nameField.text != track->getDisplayName() && !nameField.getIsEnabled()){
-    	nameField.text = track->getDisplayName();   
-    }
+//    if(nameField.text != track->getDisplayName() && !nameField.getIsEnabled()){
+//    	nameField.text = track->getDisplayName();   
+//    }
+//    
+//	if(timeline->areHeadersEditable() && !nameField.getIsEnabled()){
+//		nameField.enable();
+//	}
+//	
+//	if(!timeline->areHeadersEditable() && nameField.getIsEnabled()){
+//		nameField.disable();
+//	}
+//	
+//    if(nameField.getIsEditing()){
+//    	track->getTimeline()->presentedModalContent(this);
+//    }
     
-	if(timeline->areHeadersEditable() && !nameField.getIsEnabled()){
-		nameField.enable();
-	}
-	
-	if(!timeline->areHeadersEditable() && nameField.getIsEnabled()){
-		nameField.disable();
-	}
-	
-    if(nameField.getIsEditing()){
-    	track->getTimeline()->presentedModalContent(this);
-    }
-    
-	
-    nameField.bounds.x = bounds.x;
-    nameField.bounds.y = bounds.y;
+//	
+//    nameField.bounds.x = bounds.x;
+//    nameField.bounds.y = bounds.y;
 	ofNoFill();
 	if(bounds.height == 0){
 		ofSetColor(getTimeline()->getColors().textColor, 100);
@@ -145,20 +145,31 @@ void ofxTLTrackHeader::draw(){
 
     ofSetColor(track->getTimeline()->getColors().textColor);
     ofSetColor(0);
-    if(getTrack()->getDrawRect().height > 0 || bounds.height > 0){
-        nameField.draw();
-    }
+//    if(getTrack()->getDrawRect().height > 0 || bounds.height > 0){
+//        nameField.draw();
+//    }
 
 	//draw grippy lines on the footer draggable element
-	if(footerHeight > 0){
+	if(footerHeight > 0)
+    {
 		if(draggingSize){
-			footerStripes.setStrokeColor(track->getTimeline()->getColors().highlightColor);
-			footerStripes.draw(footerRect.x, footerRect.y);
+			//footerStripes.setStrokeColor(track->getTimeline()->getColors().highlightColor);
+			//footerStripes.draw(footerRect.x, footerRect.y);
+            ofSetColor(128,128,128);
+            ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
 		}
 		else if(hoveringFooter){
-			footerStripes.setStrokeColor(track->getTimeline()->getColors().outlineColor);
-			footerStripes.draw(footerRect.x, footerRect.y);
+//			footerStripes.setStrokeColor(track->getTimeline()->getColors().outlineColor);
+//			footerStripes.draw(footerRect.x, footerRect.y);
+            ofSetColor(96,96,96);
+            ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
+
 		}
+        else
+        {
+            ofSetColor(0,0,0);
+            ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
+        }
 	}
 	ofPopStyle();
         

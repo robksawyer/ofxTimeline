@@ -34,10 +34,10 @@
 
 #include "ofMain.h"
 #include "ofxTLTrack.h"
-#include "ofxTextInputField.h"
+//#include "ofxTextInputField.h"
 #include "ofxDatGui.h"
 
-#define FOOTER_HEIGHT 16
+#define FOOTER_HEIGHT 8
 
 class ofxTLTrackHeader : public ofxTLTrack
 {
@@ -64,14 +64,14 @@ class ofxTLTrackHeader : public ofxTLTrack
 	virtual void collapseTrack();
     
 	virtual ofRectangle getFooterRect();
-	virtual void textFieldEnter(string& newText);
+	//virtual void textFieldEnter(string& newText);
 	
 	//for the header, this returns the track's display name
     virtual string getDisplayName();
 	
   protected:
 	ofxTLTrack* track;
-	ofxTextInputField nameField;
+//	ofxTextInputField nameField;
 	
 	float footerHeight;
 	void recalculateFooter();
