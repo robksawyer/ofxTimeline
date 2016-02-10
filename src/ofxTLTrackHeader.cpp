@@ -90,46 +90,28 @@ string ofxTLTrackHeader::getDisplayName(){
 	return "";
 }
 
-void ofxTLTrackHeader::draw(){
+void ofxTLTrackHeader::draw()
+{
 	ofRectangle trackRect = track->getDrawRect();
 
 	float footerStartY = trackRect.y + trackRect.height;
 	footerRect = ofRectangle(bounds.x, footerStartY, bounds.width, footerHeight);
+
 //	if(footerRect.width != footerStripeWidth){
 //		recalculateFooterStripes();
 //	}
 	
 	ofPushStyle();
 	
-	if(track->hasFocus()){
-		ofFill();
-		//ofSetColor(timeline->getColors().highlightColor, 50);
-        ofSetColor(255,255,255,20);
-		ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
-
-	}
-
-	// TODO: set these somewhere else instead of setting it every frame here
-    // set name if it's empty and we're not editing
-//    if(nameField.text != track->getDisplayName() && !nameField.getIsEnabled()){
-//    	nameField.text = track->getDisplayName();   
-//    }
-//    
-//	if(timeline->areHeadersEditable() && !nameField.getIsEnabled()){
-//		nameField.enable();
+//	if(track->hasFocus())
+//    {
+//		ofFill();
+//		//ofSetColor(timeline->getColors().highlightColor, 50);
+//        ofSetColor(255,0,255,255);
+//		ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
+//
 //	}
-//	
-//	if(!timeline->areHeadersEditable() && nameField.getIsEnabled()){
-//		nameField.disable();
-//	}
-//	
-//    if(nameField.getIsEditing()){
-//    	track->getTimeline()->presentedModalContent(this);
-//    }
-    
-//	
-//    nameField.bounds.x = bounds.x;
-//    nameField.bounds.y = bounds.y;
+
 	ofNoFill();
 	if(bounds.height == 0){
 		ofSetColor(getTimeline()->getColors().textColor, 100);
@@ -139,15 +121,13 @@ void ofxTLTrackHeader::draw(){
 	}
 
 	ofSetColor(track->getTimeline()->getColors().outlineColor);
-    ofFill();
-    ofSetColor(255,0,0,5);
-	ofRect(bounds);
+
+//    ofFill();
+//    ofSetColor(255,0,0,255);
+//	ofRect(bounds);
 
     ofSetColor(track->getTimeline()->getColors().textColor);
     ofSetColor(0);
-//    if(getTrack()->getDrawRect().height > 0 || bounds.height > 0){
-//        nameField.draw();
-//    }
 
 	//draw grippy lines on the footer draggable element
 	if(footerHeight > 0)
@@ -155,18 +135,20 @@ void ofxTLTrackHeader::draw(){
 		if(draggingSize){
 			//footerStripes.setStrokeColor(track->getTimeline()->getColors().highlightColor);
 			//footerStripes.draw(footerRect.x, footerRect.y);
+            ofFill();
             ofSetColor(128,128,128);
             ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
 		}
 		else if(hoveringFooter){
 //			footerStripes.setStrokeColor(track->getTimeline()->getColors().outlineColor);
 //			footerStripes.draw(footerRect.x, footerRect.y);
+            ofFill();
             ofSetColor(96,96,96);
             ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
-
 		}
         else
         {
+            ofFill();
             ofSetColor(0,0,0);
             ofRect(footerRect.x, footerRect.y,bounds.width,FOOTER_HEIGHT);
         }

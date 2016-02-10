@@ -66,6 +66,7 @@ class ofxTLTicker : public ofxTLTrack
 	virtual void setHoverTime(unsigned long long millis);
 
 	bool getIsScrubbing();
+    void refresh();
 	
   protected:
 	void updateTimelinePosition();

@@ -44,6 +44,12 @@ ofxTLTicker::ofxTLTicker() {
 ofxTLTicker::~ofxTLTicker(){
 }
 
+void ofxTLTicker::refresh()
+{
+    refreshTickMarks();
+    updateBPMPoints();
+}
+
 void ofxTLTicker::draw(){
 	
 	if(bounds.height == 0){
@@ -69,14 +75,16 @@ void ofxTLTicker::draw(){
 	tickerMarks.setStrokeWidth(1);
 	tickerMarks.draw(0, bounds.y);
 		
-    if(drawBPMGrid){
+    if(drawBPMGrid)
+    {
 		if(viewIsDirty){
 	        updateBPMPoints();
 		}
         ofPushStyle();
         ofSetColor(255, 255, 255, 50);
         for(int i = 0; i < bpmScreenPoints.size(); i++){
-            ofSetLineWidth(bpmScreenPoints[i].weight);
+            ofSetLineWidth(1.0);
+            ofSetColor(255,255,255,20*bpmScreenPoints[i].weight);
             ofLine(bpmScreenPoints[i].screenX, getBottomEdge(), bpmScreenPoints[i].screenX, totalDrawRect.y+totalDrawRect.height);
         }
         ofPopStyle();

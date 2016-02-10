@@ -810,11 +810,13 @@ void ofOpenALSoundPlayer_TimelineAdditions::play(){
 	if (bMultiPlay && !bLoop){
 		sources.resize(sources.size()+channels);
 		alGenSources(channels, &sources[sources.size()-channels]);
-		if (alGetError() != AL_NO_ERROR){
+		if (alGetError() != AL_NO_ERROR)
+        {
 			ofLog(OF_LOG_ERROR,"ofOpenALSoundPlayer_TimelineAdditions: error creating multiplay stereo sources");
 			return;
 		}
-		for(int i=0;i<channels;i++){
+		for(int i=0;i<channels;i++)
+        {
 			alSourcei (sources[sources.size()-channels+i], AL_BUFFER,   buffers[i]   );
 			// only stereo panning
 			if(i==0){
@@ -860,6 +862,7 @@ void ofOpenALSoundPlayer_TimelineAdditions::initFFT(int bands){
 	cx_out.resize(bands);
 	bins.resize(bands);
 	createWindow(signalSize);
+    //cout << "ofOpenALSoundPlayer :: initFFT :: bin size : " << bins.size() << endl;
 }
 
 // ----------------------------------------------------------------------------
@@ -976,13 +979,16 @@ vector<float>& ofOpenALSoundPlayer_TimelineAdditions::getSpectrum(int bands){
 	for(int i= 0; i < bands; i++) {
 		bins[i] += sqrtf(cx_out[i].r * cx_out[i].r + cx_out[i].i * cx_out[i].i) * normalizer;
 	}
+    //cout << "ofOpenALSoundPlayer :: getSpectrum :: bin size : " << bins.size() << endl;
+
 	return bins;
 }
 
 // ----------------------------------------------------------------------------
 vector<float>& ofOpenALSoundPlayer_TimelineAdditions::getAverages(){
     
-    if(averages.size() > 0){
+    if(averages.size() > 0)
+    {
         getSpectrum(bins.size());
         float max = 0;
         for (int i = 0; i < octaves; i++){
@@ -1006,6 +1012,8 @@ vector<float>& ofOpenALSoundPlayer_TimelineAdditions::getAverages(){
         }
     }
     
+    //cout << "ofOpenALSoundPlayer :: getAverages :: bin size : " << bins.size() << endl;
+
     
     return averages;
 }
@@ -1046,6 +1054,8 @@ void ofOpenALSoundPlayer_TimelineAdditions::setLogAverages(int minBandwidth, int
     
     avgPerOctave = bandsPerOctave;
     averages.resize(octaves * bandsPerOctave);
+    
+    //cout << "ofOpenALSoundPlayrer_TLAdd : averages size " << averages.size() << "minBandWidth :  " << minBandwidth << "bandsPerOctave : "  << bandsPerOctave << endl;
 }
 
 // ----------------------------------------------------------------------------

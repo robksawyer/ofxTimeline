@@ -30,18 +30,18 @@
  *
  */
 
-#include "ofxTLDropDownFlags.h"
+#include "ofxTLFileSelectFlags.h"
 #include "ofxTimeline.h"
 #include "ofxHotKeys.h"
 
 //flagssss
-ofxTLDropDownFlags::ofxTLDropDownFlags() {
+ofxTLFileSelectFlags::ofxTLFileSelectFlags() {
     enteringText = false;
     clickedTextField = NULL;
 
 }
 
-void ofxTLDropDownFlags::draw()
+void ofxTLFileSelectFlags::draw()
 {
 
 //    if(timeline->isModal())
@@ -66,7 +66,7 @@ void ofxTLDropDownFlags::draw()
     ofFill();
     ofSetLineWidth(5);
     for(int i = keyframes.size()-1; i >= 0; i--){
-        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        ofxTLFileSelectFlag* key = (ofxTLFileSelectFlag*)keyframes[i];
         if(isKeyframeIsInBounds(key)){
             int screenX = millisToScreenX(key->time);
             int textHeight = bounds.y + 10 + ( (20*i) % int(MAX(bounds.height-15, 15)));
@@ -85,38 +85,38 @@ void ofxTLDropDownFlags::draw()
             
             
             //DatGUI
-            key->menu->setPosition(x,y);
-            if(!key->menu->getIsExpanded()) key->menu->draw();
+//            key->menu->setPosition(x,y);
+//            if(!key->menu->getIsExpanded()) key->menu->draw();
         }
     }
     ofPopStyle();
 }
 
-void ofxTLDropDownFlags::drawModalContent()
+void ofxTLFileSelectFlags::drawModalContent()
 {
     for(int i = keyframes.size()-1; i >= 0; i--)
     {
-        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+        ofxTLFileSelectFlag* key = (ofxTLFileSelectFlag*)keyframes[i];
         if(isKeyframeIsInBounds(key))
         {
-            key->menu->draw();
+//            key->menu->draw();
         }
         
     }
     
 }
 
-void ofxTLDropDownFlags::mouseMoved(ofMouseEventArgs& args, long millis)
+void ofxTLFileSelectFlags::mouseMoved(ofMouseEventArgs& args, long millis)
 {
     
 }
 
 
 //main function to get values out of the timeline, operates on the given value range
-bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
+bool ofxTLFileSelectFlags::mousePressed(ofMouseEventArgs& args, long millis)
 {
-    
-    ofxTLDropDownFlag* key = NULL;
+ /*
+    ofxTLFileSelectFlag* key = NULL;
     
     if(active)
     {
@@ -199,10 +199,10 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
              }
         }
     }// if active
-        
+  */
+    
 }// end
-    
-    
+  
     //if we aren't entering text and someone has the shift key held down don't let us go into modal
     //    if(!enteringText && ofGetModifierSelection()){
     //        return ofxTLBangs::mousePressed(args, millis);
@@ -291,7 +291,7 @@ bool ofxTLDropDownFlags::mousePressed(ofMouseEventArgs& args, long millis)
 
 
 
-void ofxTLDropDownFlags::mouseDragged(ofMouseEventArgs& args, long millis){
+void ofxTLFileSelectFlags::mouseDragged(ofMouseEventArgs& args, long millis){
     if(!enteringText){
         ofxTLBangs::mouseDragged(args, millis);
     }
@@ -301,7 +301,7 @@ void ofxTLDropDownFlags::mouseDragged(ofMouseEventArgs& args, long millis){
 
 //if we didn't click on a text field and we are entering txt
 //take off the typing mode. Hitting enter will also do this
-void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
+void ofxTLFileSelectFlags::mouseReleased(ofMouseEventArgs& args, long millis){
 
     if(false)
 //        if(enteringText)
@@ -340,7 +340,7 @@ void ofxTLDropDownFlags::mouseReleased(ofMouseEventArgs& args, long millis){
     }
 }
 
-void ofxTLDropDownFlags::keyPressed(ofKeyEventArgs& args){
+void ofxTLFileSelectFlags::keyPressed(ofKeyEventArgs& args){
     
 //    if(enteringText){
         if(false){
@@ -358,32 +358,32 @@ void ofxTLDropDownFlags::keyPressed(ofKeyEventArgs& args){
     }
 }
 
-ofxTLKeyframe* ofxTLDropDownFlags::newKeyframe(){
-    ofxTLDropDownFlag* key = new ofxTLDropDownFlag();
+ofxTLKeyframe* ofxTLFileSelectFlags::newKeyframe(){
+    ofxTLFileSelectFlag* key = new ofxTLFileSelectFlag();
     return key;
 }
 
-void ofxTLDropDownFlags::unselectAll(){
+void ofxTLFileSelectFlags::unselectAll(){
 //    for(int i = 0; i < selectedKeyframes.size(); i++){
 //        ((ofxTLDropDownFlag*)selectedKeyframes[i])->textField.disable();
 //    }
     ofxTLKeyframes::unselectAll();
 }
 
-void ofxTLDropDownFlags::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
-    ofxTLDropDownFlag* triggerKey = (ofxTLDropDownFlag*)key;
-    triggerKey->menu->select(xmlStore.getValue("option",0));
+void ofxTLFileSelectFlags::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
+//    ofxTLFileSelectFlag* triggerKey = (ofxTLFileSelectFlag*)key;
+//    //triggerKey->menu->select(xmlStore.getValue("option",0));
 }
 
-void ofxTLDropDownFlags::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
-    ofxTLDropDownFlag* triggerKey = (ofxTLDropDownFlag*)key;
-    //xmlStore.addValue("flag", triggerKey->textField.text);
-    int selInd =  triggerKey->menu->getSelectedIndex();
-    xmlStore.addValue("option",selInd);
+void ofxTLFileSelectFlags::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
+//    ofxTLFileSelectFlag* triggerKey = (ofxTLFileSelectFlag*)key;
+//    //xmlStore.addValue("flag", triggerKey->textField.text);
+//    int selInd = 1;// triggerKey->menu->getSelectedIndex();
+//    xmlStore.addValue("option",selInd);
 }
 
-void ofxTLDropDownFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
-    ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyframe;
+void ofxTLFileSelectFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
+    ofxTLFileSelectFlag* flag = (ofxTLFileSelectFlag*)keyframe;
 //    if(flag->textField.getIsEditing()){
 //        timeline->dismissedModalContent();
 //        timeline->flagTrackModified(this);
@@ -391,7 +391,7 @@ void ofxTLDropDownFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
 //    flag->textField.disable();
 }
 
-void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
+void ofxTLFileSelectFlags::bangFired(ofxTLKeyframe* key){
     ofxTLBangEventArgs args;
     args.sender = timeline;
     args.track = this;
@@ -407,24 +407,24 @@ void ofxTLDropDownFlags::bangFired(ofxTLKeyframe* key){
 
     //args.flag = ((ofxTLDropDownFlag*)key)->menu->getSelectedIndex();
     
-    string selectedLabel;
-    ofxDatGuiDropdown* fl = ((ofxTLDropDownFlag*)key)->menu;
-    selectedLabel = ofToString(fl->getSelectedIndex());
-    args.flag = selectedLabel;
+//    string selectedLabel;
+//    ofxDatGuiDropdown* fl = ((ofxTLDropDownFlag*)key)->menu;
+//    selectedLabel = ofToString(fl->getSelectedIndex());
+//    args.flag = selectedLabel;
     
     ofNotifyEvent(events().bangFired, args);
     
 }
 
-string ofxTLDropDownFlags::getTrackType(){
-    return "DropDownFlags";
+string ofxTLFileSelectFlags::getTrackType(){
+    return "FileSelectFlags";
 }
 
-void ofxTLDropDownFlags::addFlag(string key) {
+void ofxTLFileSelectFlags::addFlag(string key) {
 //    addFlagAtTime(key, timeline->getCurrentTimeMillis());
 }
 
-void ofxTLDropDownFlags::addFlagAtTime(string key, unsigned long long time){
+void ofxTLFileSelectFlags::addFlagAtTime(string key, unsigned long long time){
 /*
     //	cout << "***ADDING FLAG WITH TIME " << time << endl;
     if(time > 2000000){
@@ -441,7 +441,7 @@ void ofxTLDropDownFlags::addFlagAtTime(string key, unsigned long long time){
 */
  }
 
-ofxTLDropDownFlag* ofxTLDropDownFlags::getFlagWithKey(string key){
+ofxTLFileSelectFlag* ofxTLFileSelectFlags::getFlagWithKey(string key){
 //    for(int i = 0; i < keyframes.size(); i++){
 //        ofxTLDropDownFlag* flag = (ofxTLDropDownFlag*)keyframes[i];
 ////        if( flag->textField.text == key ){
@@ -451,12 +451,12 @@ ofxTLDropDownFlag* ofxTLDropDownFlags::getFlagWithKey(string key){
 //    return NULL;
 }
 
-void ofxTLDropDownFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
+void ofxTLFileSelectFlags::onDropdownEvent(ofxDatGuiDropdownEvent e)
 {
-    cout << "DropDownFlags got the event " << endl;
+    cout << "FileSelectFlags got the event " << endl;
 }
 
-void ofxTLDropDownFlags::update()
+void ofxTLFileSelectFlags::update()
 {
     ofxTLBangs::update();
     
@@ -483,7 +483,7 @@ void ofxTLDropDownFlags::update()
 
 
 
-void ofxTLDropDownFlags::collapseAllFlags()
+void ofxTLFileSelectFlags::collapseAllFlags()
 {
     for(int i = 0; i < keyframes.size(); i++)
     {
@@ -493,44 +493,44 @@ void ofxTLDropDownFlags::collapseAllFlags()
 }
 
 
-int ofxTLDropDownFlags::isAnyOptionInFocus(ofxTLDropDownFlag* key)
+int ofxTLFileSelectFlags::isAnyOptionInFocus(ofxTLFileSelectFlag* key)
 {
     int res = -11;
-    
-    //try to know if you're clicking an option of the DropDown ...
-    bool dropDownIsInFocus = key->menu->getFocused();
-    //if (dropDownIsInFocus) cout << "Menu DropDown Is In Focus ?? here ??" << ofGetElapsedTimef() <<endl;
-    
-    for(int i=0;i<key->menu->children.size();i++)
-    {
-        bool childrenFocus = key->menu->getChildAt(i)->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
-        if (childrenFocus)
-        {
-            res = i;
-            return res;
-        }
-        
-    }
-    //cout << "res = " << res << endl;
+//    
+//    //try to know if you're clicking an option of the DropDown ...
+//    bool dropDownIsInFocus = key->menu->getFocused();
+//    //if (dropDownIsInFocus) cout << "Menu DropDown Is In Focus ?? here ??" << ofGetElapsedTimef() <<endl;
+//    
+//    for(int i=0;i<key->menu->children.size();i++)
+//    {
+//        bool childrenFocus = key->menu->getChildAt(i)->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
+//        if (childrenFocus)
+//        {
+//            res = i;
+//            return res;
+//        }
+//        
+//    }
+//    //cout << "res = " << res << endl;
     return res;
 }
 
-int ofxTLDropDownFlags::isAnyDropDownInFocus()
+int ofxTLFileSelectFlags::isAnyDropDownInFocus()
 {
     int result=-1;
 
-    for(int i = 0; i < keyframes.size(); i++)
-    {
-        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
-        bool dropDownIsInFocus = key->menu->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
-        
-        if (dropDownIsInFocus)
-        {
-            //cout << "Menu DropDown Is In Focus" << ofGetElapsedTimef() <<endl;
-            result = i;
-        }
-
-    }
+//    for(int i = 0; i < keyframes.size(); i++)
+//    {
+//        ofxTLDropDownFlag* key = (ofxTLDropDownFlag*)keyframes[i];
+//        bool dropDownIsInFocus = key->menu->hitTest(ofPoint(ofGetMouseX(), ofGetMouseY()));
+//        
+//        if (dropDownIsInFocus)
+//        {
+//            //cout << "Menu DropDown Is In Focus" << ofGetElapsedTimef() <<endl;
+//            result = i;
+//        }
+//
+//    }
     
     return result;
 }

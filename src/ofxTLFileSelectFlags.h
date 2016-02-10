@@ -38,63 +38,24 @@
 
 //int DROP_WIDTH = 180;
 
-class ofxTLDropDownFlag : public ofxTLKeyframe {
+class ofxTLFileSelectFlag : public ofxTLKeyframe {
 public:
     
-    ofxTLDropDownFlag()
+    ofxTLFileSelectFlag()
     {
-        //theme = new ofxDatGuiThemeWireframe();
-        //theme->layout.width = 120;
         
-        vecPresets.clear();
-        
-        vecPresets.push_back("1 COLORITO");
-        vecPresets.push_back("2 GORGORITO");
-        vecPresets.push_back("3 XIRINGUITO");
-        vecPresets.push_back("4 MENGUANTIO");
-        vecPresets.push_back("5 MANOLITO");
-        
-        menu = new ofxDatGuiDropdown("Preset ?", vecPresets);
-        menu->setWidth(140);
-        menu->setOpacity(1.0);
-        
-        ofColor c1 = ofColor(0,0,0);
-        ofColor c2 = ofColor(60,60,60);
-        ofColor c3 = ofColor(80,80,80);
-        ofColor c4 = ofColor(0,255,255);
-        
-        menu->setBackgroundColors(c1,c2,c3);
-        //menu->setLabelColor(c4);
-
-        //menu->expand();
-        //menu->onDropdownEvent(this, &ofxTLDropDownFlags::onDropdownEvent);
-        //menu->setTheme(theme);
+        flagButton = new ofxDatGuiButton("File ?");
     }
     
-    vector<string> vecPresets;
-    vector<ofColor> colors;
-    ofxDatGuiDropdown* menu;
-    ofxDatGuiTheme* theme;
+    ofxDatGuiButton* flagButton;
     
-    void setPresetsVector(vector<string> newVec)
-    {
-        vecPresets.clear();
-        for(int i=0;i< newVec.size();i++)
-        {
-            vecPresets.push_back(newVec[i]);
-        }
-    }
-    
-    
-    
-    //	virtual ~ofxTLFlag();
 };
 
 
 
-class ofxTLDropDownFlags : public ofxTLBangs {
+class ofxTLFileSelectFlags : public ofxTLBangs {
 public:
-    ofxTLDropDownFlags();
+    ofxTLFileSelectFlags();
     
     virtual void draw();
     virtual void drawModalContent();
@@ -114,11 +75,11 @@ public:
     
     virtual void addFlag(string key);
     virtual void addFlagAtTime(string key, unsigned long long time);
-    virtual ofxTLDropDownFlag* getFlagWithKey(string key);
+    virtual ofxTLFileSelectFlag* getFlagWithKey(string key);
     
     //datGui related
     void collapseAllFlags();
-    int isAnyOptionInFocus(ofxTLDropDownFlag* f);
+    int isAnyOptionInFocus(ofxTLFileSelectFlag* f);
     int isAnyDropDownInFocus();
     
     // to do : to work out the mouse interaction (now is dirty!)
@@ -134,11 +95,10 @@ protected:
     virtual void willDeleteKeyframe(ofxTLKeyframe* keyframe);
     
     //only set per mousedown/mouseup cycle
-    ofxTLDropDownFlag* clickedTextField;
+    ofxTLFileSelectFlag* clickedTextField;
     bool enteringText;
     
     vector<ofColor> colors;
-    ofxDatGuiDropdown* menu;
 
     
 };

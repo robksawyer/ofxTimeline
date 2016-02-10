@@ -44,7 +44,8 @@ ofxTLTrack::ofxTLTrack()
 	createdByTimeline(false),
 	timeline(NULL),
 	playbackStartTime(0),
-	isPlaying(false)
+	isPlaying(false),
+    isDragging(false)
 {
 
 }
@@ -120,19 +121,20 @@ void ofxTLTrack::_draw(){
 	if(focused){
 		ofFill();
 //		ofSetColor(timeline->getColors().highlightColor, 50);
-        ofSetColor(255,255,255,30);
+        ofSetColor(255,255,255,45);
 		ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
-	ofNoFill();
-	if(hover){
-		ofSetColor(timeline->getColors().textColor);
-	}
-	else{
-		ofSetColor(timeline->getColors().outlineColor);
-	}	
-	ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
-	ofPopStyle();
+//	ofNoFill();
+//	if(hover){
+//		ofSetColor(timeline->getColors().textColor);
+//	}
+//	else{
+//		ofSetColor(timeline->getColors().outlineColor);
+//	}	
+//	ofRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+    ofPopStyle();
 
 	ofPushStyle();
     draw();
@@ -235,6 +237,7 @@ void ofxTLTrack::_mouseDragged(ofMouseEventArgs& args, long millis){
     if(enabled){
     	mouseDragged(args, millis);
     }
+    isDragging=true;
 }
 
 void ofxTLTrack::_mouseReleased(ofMouseEventArgs& args, long millis){
@@ -242,6 +245,7 @@ void ofxTLTrack::_mouseReleased(ofMouseEventArgs& args, long millis){
         mouseReleased(args, millis);
 	    active = false;
     }
+    isDragging=false;
 }
 
 void ofxTLTrack::gainedFocus(){

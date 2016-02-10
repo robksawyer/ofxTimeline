@@ -144,7 +144,8 @@ bool ofxTLCurves::mousePressed(ofMouseEventArgs& args, long millis){
 }
 
 void ofxTLCurves::mouseDragged(ofMouseEventArgs& args, long millis){
-	if(!drawingEasingWindow){
+	if(!drawingEasingWindow)
+    {
         ofxTLKeyframes::mouseDragged(args, millis);
     }
 }

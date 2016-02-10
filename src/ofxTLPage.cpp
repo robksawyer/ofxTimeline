@@ -75,7 +75,7 @@ ofxTLPage::~ofxTLPage(){
 void ofxTLPage::setup(){
 	if(!isSetup){
         isSetup = true;
-        headerHeight = 25;
+        headerHeight = 20;
         defaultTrackHeight = 40;
         loadTrackPositions(); //name must be set
         ofAddListener(timeline->events().zoomEnded, this, &ofxTLPage::zoomEnded);
@@ -130,7 +130,7 @@ void ofxTLPage::draw(){
 	if(!headerHasFocus && !footerIsDragging && draggingInside && snapPoints.size() > 0)
     {
 		ofPushStyle();
-		ofSetColor(255,128,0,100);
+		ofSetColor(255,128,0,255);
 		set<unsigned long long>::iterator it;
 //		for(int i = 0; i < snapPoints.size(); i++){
 		for(it = snapPoints.begin(); it != snapPoints.end(); it++){
@@ -472,46 +472,46 @@ void ofxTLPage::addTrack(string trackName, ofxTLTrack* track){
 
     cout << "Adding Track Type : " << trackType << " : Name : " << trackName << endl;
 
-    if(trackType=="DropDownFlags")
-    {
-        // Default track behaviour
-        ofxTLTrackHeaderDropDown* newHeader = new ofxTLTrackHeaderDropDown();
-        newHeader->setTimeline(timeline);
-        newHeader->setTrack(track);
-        newHeader->name = trackName;
-        newHeader->setFooterHeight(footersAreHidden ? 0 : FOOTER_HEIGHT);
-        newHeader->setup();
-        
-        ofRectangle newHeaderRect;
-        if(headersAreMinimal){
-            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, 0);
-        }
-        else{
-            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, headerHeight);
-        }
-        
-        newHeader->setDrawRect(newHeaderRect);
-        
-        
-        track->setup();
-        
-        ofRectangle drawRect;
-        if(savedTrackPositions.find(trackName) != savedTrackPositions.end()){
-            drawRect = savedTrackPositions[trackName];
-        }
-        else {
-            drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
-        }
-        
-        track->setDrawRect(drawRect);
-        track->setZoomBounds(currentZoomBounds);
-        
-        tracks[trackName] = track;
-        trackList.push_back(track);
-        headers.push_back(newHeader);
-        
-    }
-    else if (true)
+//    if(trackType=="DropDownFlags")
+//    {
+//        // Default track behaviour
+//        ofxTLTrackHeaderDropDown* newHeader = new ofxTLTrackHeaderDropDown();
+//        newHeader->setTimeline(timeline);
+//        newHeader->setTrack(track);
+//        newHeader->name = trackName;
+//        newHeader->setFooterHeight(footersAreHidden ? 0 : FOOTER_HEIGHT);
+//        newHeader->setup();
+//        
+//        ofRectangle newHeaderRect;
+//        if(headersAreMinimal){
+//            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, 0);
+//        }
+//        else{
+//            newHeaderRect = ofRectangle(trackContainerRect.x, trackContainerRect.height, trackContainerRect.width, headerHeight);
+//        }
+//        
+//        newHeader->setDrawRect(newHeaderRect);
+//        
+//        
+//        track->setup();
+//        
+//        ofRectangle drawRect;
+//        if(savedTrackPositions.find(trackName) != savedTrackPositions.end()){
+//            drawRect = savedTrackPositions[trackName];
+//        }
+//        else {
+//            drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
+//        }
+//        
+//        track->setDrawRect(drawRect);
+//        track->setZoomBounds(currentZoomBounds);
+//        
+//        tracks[trackName] = track;
+//        trackList.push_back(track);
+//        headers.push_back(newHeader);
+//        
+//    }
+    if (true)
     {
         // Default track behaviour
         ofxTLTrackHeader* newHeader = new ofxTLTrackHeader();
@@ -830,16 +830,17 @@ void ofxTLPage::loadTrackPositions()
             string tDelay = trackPositions.getValue("delayMs","y_");
             
             cout << "LOAD TRACK FROM PAGE ::  ___ " << name << " , " << tType << " , " << tDelay << endl;
-            if(tType=="DropDownFlags")
-            {
-                ofxTLTrack* t = timeline->getTrack(name);
-                if(t!=NULL)
-                {
-                    ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) getTrackHeader(t);
-                    hd->setTrackDelay(ofToFloat(tDelay));
-                    cout << "setting track : " << name << " a delay of " << tDelay << endl;
-                }
-            }
+
+//            if(tType=="DropDownFlags")
+//            {
+//                ofxTLTrack* t = timeline->getTrack(name);
+//                if(t!=NULL)
+//                {
+//                    ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) getTrackHeader(t);
+//                    hd->setTrackDelay(ofToFloat(tDelay));
+//                    cout << "setting track : " << name << " a delay of " << tDelay << endl;
+//                }
+//            }
             
             trackPositions.popTag();
             
@@ -875,13 +876,13 @@ void ofxTLPage::saveTrackPositions()
             trTyp = timeline->getTrack(it->first)->getTrackType();
             trackPositions.addValue("trackType",trTyp);
             
-            if(trTyp=="DropDownFlags")
-            {
-                ofxTLTrackHeader* h = getTrackHeader(t);
-                ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) h;
-                float delay = hd->getTrackDelay();
-                trackPositions.addValue("delayMs",delay);
-            }
+//            if(trTyp=="DropDownFlags")
+//            {
+//                ofxTLTrackHeader* h = getTrackHeader(t);
+//                ofxTLTrackHeaderDropDown* hd = (ofxTLTrackHeaderDropDown*) h;
+//                float delay = hd->getTrackDelay();
+//                trackPositions.addValue("delayMs",delay);
+//            }
         }
         
         trackPositions.addValue("x", it->second.x);

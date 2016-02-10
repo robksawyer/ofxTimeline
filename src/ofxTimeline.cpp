@@ -44,8 +44,8 @@ bool headersort(ofxTLTrackHeader* a, ofxTLTrackHeader* b){
 }
 
 #define TAB_HEIGHT 30
-#define TICKER_HEIGHT 30
-#define ZOOMER_HEIGHT 30
+#define TICKER_HEIGHT 20
+#define ZOOMER_HEIGHT 15
 #define INOUT_HEIGHT 15
 
 ofxTimeline::ofxTimeline()
@@ -1115,31 +1115,44 @@ bool ofxTimeline::toggleSnapToBPM(){
 
 void ofxTimeline::enableSnapToBPM(bool enableSnap){
     snapToBPM = enableSnap;
+    ticker->refresh();
 }
 
-bool ofxTimeline::getSnapToBPM(){
+bool ofxTimeline::getSnapToBPM()
+{
+    ticker->refresh();
     return snapToBPM;
 }
 
-bool ofxTimeline::toggleShowBPMGrid(){
-    ticker->setDrawBPMGrid(!ticker->getDrawBPMGrid());		
+bool ofxTimeline::toggleShowBPMGrid()
+{
+    ticker->refresh();
+    ticker->setDrawBPMGrid(!ticker->getDrawBPMGrid());
 	return ticker->getDrawBPMGrid();
 }
 
-void ofxTimeline::setShowBPMGrid(bool enableGrid){
+void ofxTimeline::setShowBPMGrid(bool enableGrid)
+{
+    ticker->refresh();
     ticker->setDrawBPMGrid(enableGrid);
 }
 
-bool ofxTimeline::getShowBPMGrid(){
+bool ofxTimeline::getShowBPMGrid()
+{
+    ticker->refresh();
     return ticker->getDrawBPMGrid();
 }
 
-bool ofxTimeline::toggleSnapToOtherKeyframes(){
+bool ofxTimeline::toggleSnapToOtherKeyframes()
+{
+    ticker->refresh();
     snapToOtherElements = !snapToOtherElements;
     return snapToOtherElements;
 }
 
-void ofxTimeline::enableSnapToOtherKeyframes(bool enableSnapToOther){
+void ofxTimeline::enableSnapToOtherKeyframes(bool enableSnapToOther)
+{
+    ticker->refresh();
     snapToOtherElements = enableSnapToOther;
 }
 
@@ -1817,21 +1830,11 @@ float ofxTimeline::getValue(string trackName, int atFrame){
 
 bool ofxTimeline::hasTrack(string trackName)
 {
-//    int size = trackNameToPage.size();
-//    cout << "HasTrack? trackNameToPage size " << size << endl;
-//
-    cout << "--------------------" << endl;
-    for (auto x: trackNameToPage)
-    {
-        cout <<"TimelineHasTRack : " << x.first << endl;
-    }
-    cout << "  ................... " << endl;
-//    std::map<string, ofxTLPage>::iterator iter;
-//    for (iter = trackNameToPage->begin(); iter != trackNameToPage->end(); ++iter)
+//    for (auto x: trackNameToPage)
 //    {
-//
+//        cout <<"TimelineHasTRack : " << x.first << endl;
 //    }
-    
+
 	return trackNameToPage.find(trackName) != trackNameToPage.end();
 }
 
@@ -1930,6 +1933,9 @@ ofxTLFlags* ofxTimeline::addFlags(string trackName, string xmlFileName){
 	return newFlags;
 }
 
+/// ofxTLADDDROPDOWNFLAGS
+//////////////////////////
+
 ofxTLDropDownFlags* ofxTimeline::addDropDownFlags(string trackName){
     string uniqueName = confirmedUniqueName(trackName);
     return addDropDownFlags(uniqueName, nameToXMLName(uniqueName));
@@ -1943,6 +1949,27 @@ ofxTLDropDownFlags* ofxTimeline::addDropDownFlags(string trackName, string xmlFi
     addTrack(confirmedUniqueName(trackName), newDropDownFlags);
     return newDropDownFlags;
 }
+
+
+
+/// ofxTLFILESELCT
+//////////////////////////
+
+ofxTLFileSelectFlags* ofxTimeline::addFileSelectFlags(string trackName){
+    string uniqueName = confirmedUniqueName(trackName);
+    return addFileSelectFlags(uniqueName, nameToXMLName(uniqueName));
+}
+
+
+ofxTLFileSelectFlags* ofxTimeline::addFileSelectFlags(string trackName, string xmlFileName){
+    ofxTLFileSelectFlags* newFileSelectFlags = new ofxTLFileSelectFlags();
+    newFileSelectFlags->setCreatedByTimeline(true);
+    newFileSelectFlags->setXMLFileName(xmlFileName);
+    addTrack(confirmedUniqueName(trackName), newFileSelectFlags);
+    return newFileSelectFlags;
+}
+
+
 
 
 ofxTLColorTrack* ofxTimeline::addColors(string trackName){

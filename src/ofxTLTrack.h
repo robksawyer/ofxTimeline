@@ -173,6 +173,9 @@ class ofxTLTrack
 	void setCreatedByTimeline(bool created);
 	ofxTLEvents& events(); //convenience wrapper for timeline events;
 
+    // eloi
+    bool    isDragging;
+    
   protected:
 
 	ofxTimeline* timeline;

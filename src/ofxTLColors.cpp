@@ -79,9 +79,9 @@ void ofxTLColors::load(string colorFile) {
                                    settings.getValue("colors:modalBackground:b", 103),
                                    settings.getValue("colors:modalBackground:b", 255));
     
-    outlineColor = ofColor(settings.getValue("colors:outline:r", 149),
-                           settings.getValue("colors:outline:g", 204),
-                           settings.getValue("colors:outline:b", 103),
+    outlineColor = ofColor(settings.getValue("colors:outline:r", 0),
+                           settings.getValue("colors:outline:g", 255),
+                           settings.getValue("colors:outline:b", 0),
                            settings.getValue("colors:outline:a", 255));
 
 }

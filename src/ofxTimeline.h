@@ -64,6 +64,7 @@
 #include "ofxTLBangs.h"
 #include "ofxTLFlags.h"
 #include "ofxTLDropDownFlags.h"
+#include "ofxTLFileSelectFlags.h"
 #include "ofxTLSwitches.h"
 #include "ofxTLColorTrack.h"
 #include "ofxTLImageSequence.h"
@@ -375,6 +376,8 @@ class ofxTimeline : ofThread {
     ofxTLDropDownFlags* addDropDownFlags(string trackName);
     ofxTLDropDownFlags* addDropDownFlags(string trackName, string xmlFileName);
 
+    ofxTLFileSelectFlags* addFileSelectFlags(string trackName);
+    ofxTLFileSelectFlags* addFileSelectFlags(string trackName, string xmlFileName);
 
 	ofxTLColorTrack* addColors(string name); //adds with the default palette
 	ofxTLColorTrack* addColors(string name, string xmlFileName); //adds with the default palette
