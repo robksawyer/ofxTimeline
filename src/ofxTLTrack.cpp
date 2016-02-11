@@ -105,6 +105,7 @@ void ofxTLTrack::setDisplayName(string name){
 
 string ofxTLTrack::getDisplayName(){
     return displayName == "" ? name : displayName;
+//    return displayName;
 }
 
 string ofxTLTrack::getTrackType(){

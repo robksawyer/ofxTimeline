@@ -169,6 +169,7 @@ void ofxTLTicker::setHoverTime(unsigned long long millis){
 void ofxTLTicker::setBPM(float newBpm){
 	bpm = newBpm;
 	hasBPM = true;
+    refresh();
 }
 
 float ofxTLTicker::getBPM(){

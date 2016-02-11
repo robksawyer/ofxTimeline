@@ -915,7 +915,6 @@ void ofxTimeline::setDurationInSeconds(float seconds){
 	//verify no elements are being truncated
 	durationInSeconds = MAX(seconds, getLatestTime()/1000.0);
 	
-
 	if(updateInTime){
 		setInPointAtSeconds(inTimeSeconds);
 	}

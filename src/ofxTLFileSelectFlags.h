@@ -46,9 +46,10 @@ public:
         
         flagButton = new ofxDatGuiButton("File ?");
     }
-    
+    void setFilenameText(string s) {flagButton->setLabel(s);};
     ofxDatGuiButton* flagButton;
     
+    string path;
 };
 
 
@@ -78,9 +79,6 @@ public:
     virtual ofxTLFileSelectFlag* getFlagWithKey(string key);
     
     //datGui related
-    void collapseAllFlags();
-    int isAnyOptionInFocus(ofxTLFileSelectFlag* f);
-    int isAnyDropDownInFocus();
     
     // to do : to work out the mouse interaction (now is dirty!)
     int aChildrenIsFocused;
@@ -95,7 +93,7 @@ protected:
     virtual void willDeleteKeyframe(ofxTLKeyframe* keyframe);
     
     //only set per mousedown/mouseup cycle
-    ofxTLFileSelectFlag* clickedTextField;
+    ofxTLFileSelectFlag* clickedKey;
     bool enteringText;
     
     vector<ofColor> colors;

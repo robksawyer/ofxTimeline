@@ -55,7 +55,8 @@ ofxTLPage::ofxTLPage()
 	//
 }
 
-ofxTLPage::~ofxTLPage(){
+ofxTLPage::~ofxTLPage()
+{
 	if(isSetup){
 		ofRemoveListener(timeline->events().zoomEnded, this, &ofxTLPage::zoomEnded);
         isSetup = false;
@@ -368,7 +369,7 @@ void ofxTLPage::refreshSnapPoints(){
 		}
 	}
     
-	if(ticker != NULL && timeline->getSnapToBPM())
+	if(ticker != NULL && timeline->getSnapToBPM()&&(snapPoints.size()>0))
     {
 //        if(ticker == NULL) cout << "ticker is null" << endl;
 //        else cout << "ticker is NOT null" << endl;
