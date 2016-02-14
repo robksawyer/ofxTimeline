@@ -460,7 +460,7 @@ bool ofOpenALSoundPlayer_TimelineAdditions::loadSound(string fileName, bool is_s
 						multibuffer[i][j] = buffer[j*channels+i];
 					}
 					alBufferData(buffers[s*2+i],format,&multibuffer[i][0],buffer.size()/channels*2,samplerate);
-					if (alGetError() != AL_NO_ERROR){
+					if ((alGetError()) != AL_NO_ERROR){
 						ofLog(OF_LOG_ERROR,"ofOpenALSoundPlayer_TimelineAdditions: error creating stereo buffers for " + fileName);
 						return false;
 					}
@@ -475,7 +475,7 @@ bool ofOpenALSoundPlayer_TimelineAdditions::loadSound(string fileName, bool is_s
 					multibuffer[i][j] = buffer[j*channels+i];
 				}
 				alBufferData(buffers[i],format,&multibuffer[i][0],buffer.size()/channels*2,samplerate);
-				if (alGetError() != AL_NO_ERROR){
+				if ((alGetError()) != AL_NO_ERROR){
 					ofLog(OF_LOG_ERROR,"ofOpenALSoundPlayer_TimelineAdditions: error creating stereo buffers for " + fileName);
 					return false;
 				}
@@ -484,7 +484,7 @@ bool ofOpenALSoundPlayer_TimelineAdditions::loadSound(string fileName, bool is_s
 		}
 
 		for(int i=0;i<channels;i++){
-			if (alGetError() != AL_NO_ERROR){
+			if ((alGetError()) != AL_NO_ERROR){
 				ofLog(OF_LOG_ERROR,"ofOpenALSoundPlayer_TimelineAdditions: error creating stereo sources for " + fileName);
 				return false;
 			}
