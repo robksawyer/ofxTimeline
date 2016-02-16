@@ -220,6 +220,7 @@ void ofxTLTrack::playbackStarted(ofxTLPlaybackEventArgs& args){
 }
 
 bool ofxTLTrack::_mousePressed(ofMouseEventArgs& args, long millis){
+    //cout << "KKKKK" << endl;
     if(enabled){
 	    active = bounds.inside(args.x, args.y);
     	return mousePressed(args, millis);
@@ -239,6 +240,8 @@ void ofxTLTrack::_mouseDragged(ofMouseEventArgs& args, long millis){
     	mouseDragged(args, millis);
     }
     isDragging=true;
+    //cout << "_TL TRACK " << getDisplayName() <<" _MOUSE DRAGGED !! isDragging = " << isDragging <<  endl;
+    
 }
 
 void ofxTLTrack::_mouseReleased(ofMouseEventArgs& args, long millis){
@@ -246,7 +249,10 @@ void ofxTLTrack::_mouseReleased(ofMouseEventArgs& args, long millis){
         mouseReleased(args, millis);
 	    active = false;
     }
+    //cout << "_TL TRACK " << getDisplayName() <<" _MOUSE released .... is Dragging =  " << isDragging <<  endl;
     isDragging=false;
+    
+    
 }
 
 void ofxTLTrack::gainedFocus(){
@@ -406,4 +412,10 @@ float ofxTLTrack::timeForScreenX(float screenX, float durationInSeconds){
 
 bool ofxTLTrack::isOnScreen(float screenX){
 	return screenX > bounds.x && screenX < bounds.x+bounds.width;
+}
+
+bool ofxTLTrack::getIsDragging()
+{
+    //cout << "ofxTLTRACK : getIsDragging : " << isDragging << endl;
+    return isDragging;
 }

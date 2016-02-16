@@ -47,30 +47,56 @@ ofxTLInOut::ofxTLInOut()
 void ofxTLInOut::draw(){
     ofPushStyle();
     
+    ofSetColor(0);
+    ofFill();
+    ofRect(bounds);
+    
 	ofRange screenXRange(bounds.getMinX(),bounds.getMaxX());
-    if(bounds.height > 2){
-        ofSetLineWidth(3);
+    
+    if(bounds.height > 2)
+    {
+        ofSetLineWidth(1);
         int inScreenX = normalizedXtoScreenX( timeline->getInOutRange().min );
-        int outScreenX = normalizedXtoScreenX( timeline->getInOutRange().max ); 
-        if(screenXRange.contains(inScreenX)){
-            if(hoveringIn){
-                ofSetColor(timeline->getColors().highlightColor);
-            }
-            else{
-                ofSetColor(timeline->getColors().keyColor);
-            }
-            ofLine(inScreenX, bounds.y, inScreenX, bounds.y+bounds.height);
-        }
+        int outScreenX = normalizedXtoScreenX( timeline->getInOutRange().max );
+        
+        
+        // rectangle all over the in-out
+        ofSetColor(64);
+        ofRect(inScreenX,bounds.y,outScreenX-inScreenX,bounds.height);
+        if(inScreenX<0) inScreenX = 0;
+        if(outScreenX>timeline->getWidth()) outScreenX = timeline->getWidth()-1;
+        
+//        if(screenXRange.contains(inScreenX))
+//        {
+//            if(hoveringIn){
+//                ofSetColor(timeline->getColors().highlightColor);
+//            }
+//            else{
+////                ofSetColor(timeline->getColors().keyColor);
+//                ofSetColor(255);
+//
+//            }
+            ofSetColor(220);
 
-        if(screenXRange.contains(outScreenX)){
-            if(hoveringOut){
-                ofSetColor(timeline->getColors().highlightColor);
-            }
-            else{
-                ofSetColor(timeline->getColors().keyColor);
-            }
-            ofLine(outScreenX, bounds.y, outScreenX, bounds.y+bounds.height);
-        }
+            ofRect(inScreenX,bounds.y,10,bounds.height);
+//            ofLine(inScreenX, bounds.y, inScreenX, bounds.y+bounds.height);
+//        }
+
+//        if(screenXRange.contains(outScreenX))
+//        {
+//            if(hoveringOut){
+//                ofSetColor(timeline->getColors().highlightColor);
+//            }
+//            else{
+//                
+////                ofSetColor(timeline->getColors().keyColor);
+//                ofSetColor(255);
+//            }
+            ofSetColor(220);
+            ofRect(outScreenX,bounds.y,-10,bounds.height);
+//
+//            ofLine(outScreenX, bounds.y, outScreenX, bounds.y+bounds.height);
+//        }
     }
     
     //draw inout over the whole thing
@@ -81,15 +107,17 @@ void ofxTLInOut::draw(){
 	float outPointX = ofClamp(normalizedXtoScreenX(timeline->getInOutRange().max),screenXRange.min, screenXRange.max);
     
 	if(bounds.x < inPointX){
-		ofSetColor(timeline->getColors().disabledColor,120);
+//		ofSetColor(timeline->getColors().disabledColor,60);
+        ofSetColor(0,0,0,64);
 		ofRect(bounds.x, pageRect.y, inPointX - bounds.x, pageRect.height);
 		ofSetColor(timeline->getColors().highlightColor);
 		ofLine(inPointX, pageRect.y, inPointX, pageRect.y+pageRect.height);
 	}
 	
 	if(bounds.x+bounds.width > outPointX){
-		ofSetColor(timeline->getColors().disabledColor,120);
-		ofRect(outPointX, pageRect.y, (bounds.x+bounds.width) - outPointX, pageRect.height);	
+//		ofSetColor(timeline->getColors().disabledColor,60);
+        ofSetColor(0,0,0,64);
+		ofRect(outPointX, pageRect.y, (bounds.x+bounds.width) - outPointX, pageRect.height);
 		ofSetColor(timeline->getColors().highlightColor);
 		ofLine(outPointX, pageRect.y, outPointX, pageRect.y+pageRect.height);
 	}
@@ -102,6 +130,10 @@ void ofxTLInOut::setPageRectangle(ofRectangle pageRectangle){
     pageRect = pageRectangle;
 }
 
+void ofxTLInOut::mouseMoved(ofMouseEventArgs& args, long millis)
+{
+    ofxTLInOut::mouseMoved(args);
+}
 void ofxTLInOut::mouseMoved(ofMouseEventArgs& args){
 
     if(!bounds.inside(args.x,args.y)) return;
@@ -110,10 +142,26 @@ void ofxTLInOut::mouseMoved(ofMouseEventArgs& args){
 	hoveringOut = abs( normalizedXtoScreenX( timeline->getInOutRange().max ) - args.x) < 7;
 }
 
-void ofxTLInOut::mousePressed(ofMouseEventArgs& args){
+
+bool ofxTLInOut::mousePressed(ofMouseEventArgs& args, long millis)
+{
+    ofxTLInOut::mousePressed(args);
+    return true;
+}
+
+
+void ofxTLInOut::mousePressed(ofMouseEventArgs& args)
+{
+ 
+    //cout << "TLInout : mouse Press " << endl;
     
     if(!bounds.inside(args.x,args.y)) return;
-       
+    
+//    void presentedModalContent(ofxTLTrack* modalTrack);
+//    void dismissedModalContent();
+
+    // operate in modal content mode !!
+    timeline->presentedModalContent(((ofxTLTrack*)this));
     
 	float distToIn = normalizedXtoScreenX( timeline->getInOutRange().min ) - args.x;
     if(abs(distToIn) < 7){
@@ -140,23 +188,50 @@ void ofxTLInOut::mousePressed(ofMouseEventArgs& args){
         }
     }
     
+   
+    
     //cout << "dist to in " << abs(distToIn) << " out " << abs(distToOut) << " " << draggingIn << " " << draggingOut << endl;
 }
 
-void ofxTLInOut::mouseDragged(ofMouseEventArgs& args){
+
+void ofxTLInOut::mouseDragged(ofMouseEventArgs& args, long mllis)
+{
+    //cout << "TLInout : mouse drag " << endl;
+
+    ofxTLInOut::mouseDragged(args);
+}
+
+void ofxTLInOut::mouseDragged(ofMouseEventArgs& args)
+{
     if(draggingIn){
         timeline->setInPointAtPercent(screenXtoNormalizedX(args.x - dragOffset));
     }
     if(draggingOut){
         timeline->setOutPointAtPercent(screenXtoNormalizedX(args.x - dragOffset));
     }
+    
+    
+}
+
+
+void ofxTLInOut::mouseReleased(ofMouseEventArgs& args, long millis)
+{
+
+    ofxTLInOut::mouseReleased(args);
 }
 
 void ofxTLInOut::mouseReleased(ofMouseEventArgs& args){
+
+    //cout << "TLInout : mouse release " << endl;
+
+    // disable modal content
+    timeline->dismissedModalContent();
+    
     if(draggingIn || draggingOut){
 	    draggingIn = draggingOut = false;
         save();
     }
+    //ofxTLTrack::_mouseReleased(args,0);
 }
 
 void ofxTLInOut::load(){
@@ -183,4 +258,3 @@ void ofxTLInOut::save(){
 	savedSettings.popTag();//zoom
 	savedSettings.saveFile(xmlFileName);    
 }
-

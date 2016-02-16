@@ -1191,7 +1191,8 @@ void ofxTimeline::disableEvents() {
 	}
 }
 
-void ofxTimeline::mousePressed(ofMouseEventArgs& args){
+void ofxTimeline::mousePressed(ofMouseEventArgs& args)
+{
 	if(!isShowing){
 		return;
 	}
@@ -1221,7 +1222,9 @@ void ofxTimeline::mousePressed(ofMouseEventArgs& args){
 		else{
 			unselectAll();
 		}
-		currentPage->setSnappingEnabled((snapToBPM || snapToOtherElements) && dragAnchorSet);
+        //cout << "snapToBom " << snapToBPM << " snapOther " << snapToOtherElements << " dragAnchor " << dragAnchorSet << endl;
+        bool b = ((snapToBPM || snapToOtherElements) && dragAnchorSet);
+		currentPage->setSnappingEnabled(b);
 	}
 	
     //collect state buffers after items are selected and focus is set
@@ -1229,7 +1232,8 @@ void ofxTimeline::mousePressed(ofMouseEventArgs& args){
 
 }
 
-void ofxTimeline::mouseMoved(ofMouseEventArgs& args){
+void ofxTimeline::mouseMoved(ofMouseEventArgs& args)
+{
 	if(!isShowing){
 		return;
 	}
@@ -1247,7 +1251,8 @@ void ofxTimeline::mouseMoved(ofMouseEventArgs& args){
 	zoomer->mouseMoved(args);
 }
 
-void ofxTimeline::mouseDragged(ofMouseEventArgs& args){
+void ofxTimeline::mouseDragged(ofMouseEventArgs& args)
+{
 	if(!isShowing){
 		return;
 	}
@@ -1258,14 +1263,15 @@ void ofxTimeline::mouseDragged(ofMouseEventArgs& args){
     	modalTrack->mouseDragged(args, false);
         return;
     }
-    
-	inoutTrack->mouseDragged(args);
+
+    inoutTrack->mouseDragged(args);
 	ticker->mouseDragged(args);
-	currentPage->mouseDragged(args, millis);
 	zoomer->mouseDragged(args);
+    currentPage->mouseDragged(args, millis);
 }
 
-void ofxTimeline::mouseReleased(ofMouseEventArgs& args){
+void ofxTimeline::mouseReleased(ofMouseEventArgs& args)
+{
 	if(!isShowing){
 		return;
 	}
@@ -1274,15 +1280,16 @@ void ofxTimeline::mouseReleased(ofMouseEventArgs& args){
     
     dragAnchorSet = false;
 
-    if(modalTrack != NULL){
+    if(modalTrack != NULL)
+    {
     	modalTrack->mouseReleased(args, millis);
 	}
     else{
 		inoutTrack->mouseReleased(args);
 		ticker->mouseReleased(args);
-		tabs->mouseReleased(args);
-		currentPage->mouseReleased(args, millis);
 		zoomer->mouseReleased(args);
+        tabs->mouseReleased(args);
+        currentPage->mouseReleased(args, millis);
 	}
     
 	pushUndoStack();
@@ -1751,6 +1758,11 @@ ofxTLTrack* ofxTimeline::getTimecontrolTrack(){
 
 ofxTLZoomer* ofxTimeline::getZoomer(){
 	return zoomer;
+}
+
+ofxTLInOut* ofxTimeline::getInOut()
+{
+    return inoutTrack;
 }
 
 //can be used to add custom elements

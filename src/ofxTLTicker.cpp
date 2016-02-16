@@ -271,7 +271,8 @@ void ofxTLTicker::refreshTickMarks(){
 }
 
 //TODO: find a way to make this not happen every frame
-void ofxTLTicker::updateBPMPoints(){
+void ofxTLTicker::updateBPMPoints()
+{
 	
 	bpmScreenPoints.clear();
 
@@ -280,21 +281,47 @@ void ofxTLTicker::updateBPMPoints(){
 	double halfMeasure = oneMeasure/2;
 	double quarterMeasure = halfMeasure/2;
 
-	bool showMeasure = false;
+    //---
+    double oneBar = 4 * oneMeasure;
+    bool showBarMeasure = false;
+    //---
+
+    bool showMeasure = false;
 	bool showHalfMeasure = false;
 	bool showQuarterMeasure = false;
+    
+    //---
+    showBarMeasure = screenXForTime(oneBar) - screenXForTime(0) > 20;
+    //---
+    
 	showMeasure = screenXForTime(oneMeasure) - screenXForTime(0) > 20;
-	if(showMeasure){
+
+    if(showMeasure)
+    {
 		showHalfMeasure = screenXForTime(halfMeasure) - screenXForTime(0) > 20;
-		if (showHalfMeasure) {
+        
+		if (showHalfMeasure)
+        {
 			showQuarterMeasure = screenXForTime(halfMeasure) - screenXForTime(0) > 20;
 		}
 	}
 
 	int currentMeasure = 0;        
-	while(currentPoint < timeline->getDurationInSeconds()){
+	while(currentPoint < timeline->getDurationInSeconds())
+    {
 		ofxTLBPMPoint measures[4];
 		int numMeasures = 0;
+        
+        //---
+        if(showBarMeasure)
+        {
+            measures[0].millis = currentPoint * 1000;
+            measures[0].screenX = millisToScreenX(measures[0].millis);
+            measures[0].weight = 16;
+            numMeasures = 1;
+        }
+        //---
+
 		if(showMeasure){
 			measures[0].millis = currentPoint * 1000;
 			measures[0].screenX = millisToScreenX(measures[0].millis);
@@ -307,7 +334,8 @@ void ofxTLTicker::updateBPMPoints(){
 			measures[1].weight = 2;
 			numMeasures = 2;
 		}
-		if(showQuarterMeasure){
+		if(showQuarterMeasure)
+        {
 			measures[2].millis = (currentPoint+quarterMeasure) * 1000;
 			measures[2].screenX = millisToScreenX(measures[2].millis);
 			measures[2].weight = 1;
@@ -341,6 +369,31 @@ void ofxTLTicker::setDrawBPMGrid(bool drawGrid){
 	drawBPMGrid = drawGrid;
 }
 
+
+
+void ofxTLTicker::mouseMoved(ofMouseEventArgs& args, long millis)
+{
+    ofxTLTicker::mouseMoved(args);
+}
+
+bool ofxTLTicker::mousePressed(ofMouseEventArgs& args, long millis)
+{
+    ofxTLTicker::mousePressed(args);
+    return true;
+}
+
+void ofxTLTicker::mouseDragged(ofMouseEventArgs& args, long mllis)
+{
+    ofxTLTicker::mouseDragged(args);
+}
+
+void ofxTLTicker::mouseReleased(ofMouseEventArgs& args, long millis)
+{
+    ofxTLTicker::mouseReleased(args);
+}
+
+
+
 void ofxTLTicker::mouseMoved(ofMouseEventArgs& args){
 	hover = totalDrawRect.inside(args.x, args.y);
 }
@@ -348,7 +401,13 @@ void ofxTLTicker::mouseMoved(ofMouseEventArgs& args){
 void ofxTLTicker::mousePressed(ofMouseEventArgs& args){
 
 	dragging = bounds.inside(args.x, args.y);
-	if(dragging){
+    
+    
+	if(dragging)
+    {
+        // operate in modal content mode !! but just if we're inside this track !
+        timeline->presentedModalContent(((ofxTLTrack*)this));
+        
         if(timeline->getIsPlaying()){
             playOnMouseReleased = true;
             timeline->stop();
@@ -367,8 +426,14 @@ void ofxTLTicker::mouseDragged(ofMouseEventArgs& args){
 	}	
 }
 
-void ofxTLTicker::mouseReleased(ofMouseEventArgs& args){
-    if(dragging){
+void ofxTLTicker::mouseReleased(ofMouseEventArgs& args)
+{
+
+    if(dragging)
+    {
+        // disable modal content
+        timeline->dismissedModalContent();
+
 		ofxTLPlaybackEventArgs args = timeline->createPlaybackEvent();
 		ofNotifyEvent(events().playheadScrubbed, args);
         if(playOnMouseReleased){

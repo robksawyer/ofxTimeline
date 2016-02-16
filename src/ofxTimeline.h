@@ -445,11 +445,12 @@ class ofxTimeline : ofThread {
 	void setupFont(string newFontPath, int newFontSize);
 	OFX_TIMELINE_FONT_RENDERER & getFont();
 	
-	ofxTLColors& getColors();
-	ofxTimecode& getTimecode();
-	ofxMSATimer& getTimer();
-	ofxTLZoomer* getZoomer();
-	
+	ofxTLColors&    getColors();
+	ofxTimecode&    getTimecode();
+	ofxMSATimer&    getTimer();
+	ofxTLZoomer*    getZoomer();
+    ofxTLInOut*     getInOut();
+
 	vector<ofxTLPage*>& getPages();
     
 	ofVec2f getNudgePercent();

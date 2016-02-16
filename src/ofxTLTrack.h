@@ -94,8 +94,8 @@ class ofxTLTrack
 	//standard events to be implement in subclasses
 	//mousePressed returns true if the click activated the track in a way that should maintain attention
 	//for instance, selecting a keyframe
-    virtual bool mousePressed(ofMouseEventArgs& args, long millis){return false;}
-	virtual void mouseMoved(ofMouseEventArgs& args, long millis){}
+    virtual bool mousePressed(ofMouseEventArgs& args, long millis){return false;};
+    virtual void mouseMoved(ofMouseEventArgs& args, long millis){};
     virtual void mouseDragged(ofMouseEventArgs& args, long millis){};
 	virtual void mouseReleased(ofMouseEventArgs& args, long mllis){};
 
@@ -174,6 +174,7 @@ class ofxTLTrack
 	ofxTLEvents& events(); //convenience wrapper for timeline events;
 
     // eloi
+    bool    getIsDragging();
     bool    isDragging;
     
   protected:

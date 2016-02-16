@@ -39,16 +39,24 @@ class ofxTLInOut : public ofxTLTrack {
     ofxTLInOut();
     
     virtual void draw();
-	virtual void mousePressed(ofMouseEventArgs& args);
+    
+
+    virtual void mousePressed(ofMouseEventArgs& args);
 	virtual void mouseMoved(ofMouseEventArgs& args);
 	virtual void mouseDragged(ofMouseEventArgs& args);
-	virtual void mouseReleased(ofMouseEventArgs& args);
+    virtual void mouseReleased(ofMouseEventArgs& args);
+
+    virtual bool mousePressed(ofMouseEventArgs& args, long millis);
+    virtual void mouseMoved(ofMouseEventArgs& args, long millis);
+    virtual void mouseDragged(ofMouseEventArgs& args, long millis);
+    virtual void mouseReleased(ofMouseEventArgs& args, long millis);
+
     
     virtual void load();
 	virtual void save();
     
     void setPageRectangle(ofRectangle pageRectangle);
-    
+        
   protected:
     float dragOffset;
     //if both are set then it's a selection range
