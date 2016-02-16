@@ -129,6 +129,30 @@ void ofxTLZoomer::save() {
 	savedSettings.saveFile(xmlFileName);
 }
 
+//---------------
+void ofxTLZoomer::mouseMoved(ofMouseEventArgs& args, long millis)
+{
+    ofxTLZoomer::mouseMoved(args);
+}
+
+bool ofxTLZoomer::mousePressed(ofMouseEventArgs& args, long millis)
+{
+    ofxTLZoomer::mousePressed(args);
+    return true;
+}
+
+void ofxTLZoomer::mouseDragged(ofMouseEventArgs& args, long mllis)
+{
+    ofxTLZoomer::mouseDragged(args);
+}
+
+void ofxTLZoomer::mouseReleased(ofMouseEventArgs& args, long millis)
+{
+    ofxTLZoomer::mouseReleased(args);
+}
+//---------------
+
+
 void ofxTLZoomer::mouseMoved(ofMouseEventArgs& args) {
 	
 }
@@ -136,7 +160,12 @@ void ofxTLZoomer::mouseMoved(ofMouseEventArgs& args) {
 void ofxTLZoomer::mousePressed(ofMouseEventArgs& args) {
 
 	if(!enabled) return;
-	
+    else if(bounds.inside(args.x, args.y))
+    {
+        // operate in modal content mode !! but just if we're inside this track !
+        timeline->presentedModalContent(((ofxTLTrack*)this));
+    }
+    
 	minSelected = maxSelected = midSelected = false;
 	if (pointInScreenBounds(ofVec2f(args.x, args.y))) {
 		mouseIsDown = true;
@@ -221,8 +250,12 @@ bool ofxTLZoomer::isActive(){
 
 void ofxTLZoomer::mouseReleased(ofMouseEventArgs& args){
 	if(!enabled) return;
-	
-	if(mouseIsDown){
+
+	if(mouseIsDown)
+    {
+        // disable modal content
+        timeline->dismissedModalContent();
+
 		mouseIsDown = false;
 		notifyZoomEnded();
 //		timeline->flagTrackModified(this);

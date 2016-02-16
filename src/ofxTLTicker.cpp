@@ -71,7 +71,7 @@ void ofxTLTicker::draw(){
 		refreshTickMarks();
 	}
 	
-	tickerMarks.setStrokeColor( ofColor(200, 180, 40) );
+	tickerMarks.setStrokeColor( ofColor(200, 200, 200) );
 	tickerMarks.setStrokeWidth(1);
 	tickerMarks.draw(0, bounds.y);
 		
@@ -192,12 +192,14 @@ void ofxTLTicker::getSnappingPoints(set<unsigned long long>& points){
 	points.insert(timeline->getCurrentTimeMillis());
 }
 
-void ofxTLTicker::refreshTickMarks(){
+void ofxTLTicker::refreshTickMarks()
+{
 	tickerMarks.clear();
 
     unsigned long long startMillis = zoomBounds.min * timeline->getDurationInMilliseconds();
     unsigned long long endMillis = zoomBounds.max * timeline->getDurationInMilliseconds();
     unsigned long long durationInview = endMillis-startMillis;
+    
     float millisPerPixel = durationInview / bounds.width;
 	
 	//expand to days
@@ -205,25 +207,29 @@ void ofxTLTicker::refreshTickMarks(){
 	bool showSeconds;
 	bool showMinutes;
 	int step = 4;
-	//find the scale of time being shown
-	if(millisPerPixel > 1000*60 * step){ //each pixel is more than a minute
+	
+    //find the scale of time being shown
+	if(millisPerPixel > 1000*60 * step)
+    { //each pixel is more than a minute
 		showMillis = false;
 		showSeconds = false;
 		showMinutes = false;
 	}
-	else if(millisPerPixel > 1000 * step){ //each pixel is more than a second
+	else if(millisPerPixel > 1000 * step)
+    { //each pixel is more than a second
 		showMillis = false;
 		showSeconds = false;
 		showMinutes = true;
 	}
-	else if(millisPerPixel > step){ //each pixel is more than a millisecond
+	else if(millisPerPixel > step)
+    { //each pixel is more than a millisecond
 		showMillis = false;
-		showSeconds = true;
+		showSeconds = false;
 		showMinutes = true;
 	}
 	else{ //each pixel is less than a millsecond
 		showMillis = true;
-		showSeconds = true;
+		showSeconds = false;
 		showMinutes = true;
 	}
 	
@@ -231,13 +237,16 @@ void ofxTLTicker::refreshTickMarks(){
 	int lastSecond = lastMillis/1000;
 	int lastMinute = lastSecond/60;
 	int lastHour = lastMinute/60;
-	for(int i = bounds.getMinX()+step; i < bounds.getMaxX(); i+=step){
+    
+	for(int i = bounds.getMinX()+step; i < bounds.getMaxX(); i+=step)
+    {
 		int height = 0;
 		unsigned long long currentMillis = screenXToMillis(i);
 		int currentSecond = currentMillis/1000;
 		int currentMinute = currentSecond/60;
 		int currentHour = currentMinute/60;
 		float x;
+        
 		if(showMillis && currentMillis > lastMillis){
 			height = bounds.height*.25;
 			lastMillis = currentMillis;
