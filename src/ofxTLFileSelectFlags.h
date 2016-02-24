@@ -45,6 +45,7 @@ public:
     {
         
         flagButton = new ofxDatGuiButton("File ?");
+        flagButton->setWidth(90);
     }
     void setFilenameText(string s) {flagButton->setLabel(s);};
     ofxDatGuiButton* flagButton;
@@ -79,7 +80,8 @@ public:
     virtual ofxTLFileSelectFlag* getFlagWithKey(string key);
     
     //datGui related
-    
+    string defaultPath;
+    void setDefaultPath(string s);
     // to do : to work out the mouse interaction (now is dirty!)
     int aChildrenIsFocused;
     int whichIsInFocus;

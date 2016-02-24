@@ -49,6 +49,7 @@ class ofxTLAudioTrack : public ofxTLTrack
 	virtual bool isSoundLoaded();
 	virtual float getDuration(); //in seconds
 	virtual string getSoundfilePath();
+    virtual string getSoundfileName();
 	
 	virtual bool mousePressed(ofMouseEventArgs& args, long millis);
 	virtual void mouseMoved(ofMouseEventArgs& args, long millis);
@@ -91,6 +92,7 @@ class ofxTLAudioTrack : public ofxTLTrack
     void setFFTLogAverages(int minBandwidth = 88, int bandsPerOctave = 20);
     int getLogAverageMinBandwidth();
     int getLogAverageBandsPerOctave();
+    float getEnergy();
     
     int getFFTSize();
 	vector<float>& getFFT();
@@ -106,6 +108,7 @@ class ofxTLAudioTrack : public ofxTLTrack
 	vector<ofPolyline> previews;
 	void recomputePreview();
 	string soundFilePath;
+    string soundFileName;
 	float lastFFTPosition;
     float lastBufferPosition;
 	int defaultSpectrumBandwidth;

@@ -1205,7 +1205,7 @@ void ofxTimeline::mousePressed(ofMouseEventArgs& args)
     else{
 		bool focus = getDrawRect().inside(args.x, args.y);
 		if(focus && !timelineHasFocus){
-			currentPage->timelineGainedFocus();    
+			currentPage->timelineGainedFocus();
 		}
 		else if(!focus && timelineHasFocus){
 			currentPage->timelineLostFocus();
@@ -1309,8 +1309,32 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
     if(spacebarTogglesPlay && args.key == ' '){
         togglePlay();
     }
+//    else if(args.key == 'c' || args.key == 'c'-96 || args.key == 'C' || args.key == 'C'-96)
+//    {
+//        cout << "Timeline :: KeyPressed :: it's a c !" << endl;
+//        if(ofGetModifierShiftPressed())
+//        {
+//            cout << "Timeline :: KeyPressed :: shift is pressed !!" << endl;
+//            currentPage->evenlyDistributeTrackHeights();
+//        }
+//        else{
+//            cout << "Timeline :: KeyPressed :: shift is NOT pressed !!" << endl;
+//            
+//            currentPage->collapseAllTracks(true);
+//        }
+//        ofEventArgs args;
+//        ofNotifyEvent(events().viewWasResized, args);
+//    }
+//    else if(args.key == 'e' || args.key == 'e'-96)
+//    {
+//        currentPage->expandFocusedTrack();
+//        ofEventArgs args;
+//        ofNotifyEvent(events().viewWasResized, args);
+//    }
 
-	if(!timelineHasFocus) return;
+
+    
+	//if(!timelineHasFocus) return;
 	
 	if(undoEnabled && ofGetModifierShortcutKeyPressed() && (args.key == 'z' || args.key == 'z'-96)){
 		if(ofGetModifierShiftPressed()){
@@ -1356,9 +1380,14 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 			save();
 		}
 	}
-	else if(ofGetModifierAltPressed()){
-		if(args.key == 'c' || args.key == 'c'-96 || args.key == 'C' || args.key == 'C'-96){
-			if(ofGetModifierShiftPressed()){
+	else if(ofGetModifierAltPressed())
+    {
+        cout << "Timeline:: keyPressed :: ALT : Key " << args.key  << endl;
+        
+		if(args.key == 'c' || args.key == 'c'-96 || args.key == 'C' || args.key == 'C'-96)
+        {
+			if(ofGetModifierShiftPressed())
+            {
 				currentPage->evenlyDistributeTrackHeights();
 			}
 			else{
@@ -1631,9 +1660,11 @@ void ofxTimeline::addPage(string pageName, bool makeCurrent){
 		return;
 	}
 	
-	for(int i = 0; i < pages.size(); i++){
-		if(pageName == pages[i]->getName()){
-			ofLogError("ofxTimeline -- Page " + pageName + " already exists");
+	for(int i = 0; i < pages.size(); i++)
+    {
+		if(pageName == pages[i]->getName())
+        {
+			ofLogError("ofxTimeline -- Page " + pageName + " already exists. From total of " + ofToString(pages.size()));
 			return;
 		}
 	}

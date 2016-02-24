@@ -127,7 +127,6 @@ void ofxTLPage::draw(){
 		tracks[headers[i]->name]->_draw();
 		headers[i]->draw();
 	}
-	
 	if(!headerHasFocus && !footerIsDragging && draggingInside && snapPoints.size() > 0)
     {
 		ofPushStyle();
@@ -156,7 +155,8 @@ void ofxTLPage::draw(){
 	}
 }
 
-void ofxTLPage::timelineGainedFocus(){
+void ofxTLPage::timelineGainedFocus()
+{
 
 }
 
@@ -190,6 +190,7 @@ void ofxTLPage::mousePressed(ofMouseEventArgs& args, long millis)
             if(clickIsInTrack || clickIsInHeader || justMadeSelection || clickIsInFooter)
             {
                 newFocus = tracks[ headers[i]->name ];
+                lastFocusedTrack = newFocus;
                 break;
             }
 		}
@@ -542,7 +543,6 @@ void ofxTLPage::addTrack(string trackName, ofxTLTrack* track){
         else {
             drawRect = ofRectangle(trackContainerRect.x, newHeaderRect.y+newHeaderRect.height, trackContainerRect.width, defaultTrackHeight);
         }
-        
         track->setDrawRect(drawRect);
         track->setZoomBounds(currentZoomBounds);
         
@@ -629,17 +629,30 @@ void ofxTLPage::setExpandToHeight(float height){
 	heightBeforeCollapse = height;
 }
 
-void ofxTLPage::evenlyDistributeTrackHeights(){
+void ofxTLPage::evenlyDistributeTrackHeights()
+{
 	float addedHeightPerTrack = 0;
+    
 	if(!headersAreMinimal)addedHeightPerTrack += headerHeight;
+    
 	if(!footersAreHidden) addedHeightPerTrack += FOOTER_HEIGHT;
     
-	if(heightBeforeCollapse == 0){
-		heightBeforeCollapse = trackContainerRect.height - addedHeightPerTrack*headers.size();
-	}
+    float trackCont = trackContainerRect.height;
+    
+    
+//	if(heightBeforeCollapse == 0)
+//    {
+//		
+//	}
 	
+    heightBeforeCollapse = ofGetHeight() - 93 - addedHeightPerTrack*headers.size();
+    
 	float heightPerTrack = heightBeforeCollapse / headers.size();
-	
+    
+    cout << "trackContainerRect.height" << trackContainerRect.height << endl;
+    cout << "TLPage::setExpandToHeight per track : " << heightPerTrack << " ... heightBeforeCollapse : " << heightBeforeCollapse << " ... addedHeightPerTrack" << addedHeightPerTrack << " ... tracks = " << headers.size() << endl;
+    
+    
 	for(int i = 0; i < headers.size(); i++){
 		ofRectangle trackRect = headers[i]->getTrack()->getDrawRect();
 		trackRect.height = heightPerTrack;
@@ -656,9 +669,26 @@ void ofxTLPage::collapseAllTracks(bool excludeFocusTrack){
 	heightBeforeCollapse = trackContainerRect.height;
 	
 	for(int i = 0; i < headers.size(); i++){
-		if(!excludeFocusTrack || focusedTrack != headers[i]->getTrack()){
+		if(!excludeFocusTrack || focusedTrack != headers[i]->getTrack())
+        {
 			headers[i]->collapseTrack();
 		}
+        else
+        {
+            float addedHeightPerTrack = 0;
+
+            if(!headersAreMinimal)addedHeightPerTrack += headerHeight;
+            if(!footersAreHidden) addedHeightPerTrack += FOOTER_HEIGHT;
+            
+            
+            float heightToMaximize = ofGetHeight() - 93 - addedHeightPerTrack*headers.size();
+            
+            //float heightPerTrack = heightBeforeCollapse / headers.size();
+            ofRectangle trackRect = headers[i]->getTrack()->getDrawRect();
+            trackRect.height = heightToMaximize;
+            headers[i]->getTrack()->setDrawRect(trackRect);
+            
+        }
 	}
 	
 	recalculateHeight();

@@ -70,6 +70,10 @@ class ofxTLPage {
 	void evenlyDistributeTrackHeights();
 	void expandFocusedTrack();
 	void setExpandToHeight(float height);
+
+    ofxTLTrack* lastFocusedTrack;
+    ofxTLTrack* getLastFocusedTrack() {return lastFocusedTrack;};
+
 		
 	virtual void setZoomBounds(ofRange zoomBounds);
 	

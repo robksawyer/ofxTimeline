@@ -58,6 +58,10 @@ void ofxTLTicker::draw(){
 	
 	ofPushStyle();
 	
+    ofFill();
+    ofSetColor(150);
+    ofRect(bounds);
+
 	int textH, textW;
 	string text;
 
@@ -71,7 +75,7 @@ void ofxTLTicker::draw(){
 		refreshTickMarks();
 	}
 	
-	tickerMarks.setStrokeColor( ofColor(200, 200, 200) );
+	tickerMarks.setStrokeColor(0);
 	tickerMarks.setStrokeWidth(1);
 	tickerMarks.draw(0, bounds.y);
 		
@@ -94,9 +98,12 @@ void ofxTLTicker::draw(){
 	textW = 3;
 
 	//highlite current mouse position
-	if(hover){
+	if(hover)
+    {
 		//draw background rect
-		ofSetColor(timeline->getColors().backgroundColor);
+		//ofSetColor(timeline->getColors().backgroundColor);
+        
+        ofSetColor(200);
         float screenX = ofClamp(millisToScreenX(hoverTime), bounds.getMinX(), bounds.getMaxX());
 		text = timeline->formatTime(hoverTime);
 		textW = timeline->getFont().stringWidth(text)+3;
@@ -111,9 +118,10 @@ void ofxTLTicker::draw(){
 			}
 			previewTimecodeX = ofClamp(screenX+5, bounds.getMinX(), bounds.getMaxX()-textW-5);
             ofFill();
-            ofRect(previewTimecodeX-5, bounds.y+textH, textW, textH);		
+            //ofRect(previewTimecodeX-5, bounds.y+textH, textW, textH);
             //draw playhead line
-            ofSetColor(timeline->getColors().textColor);
+//            ofSetColor(timeline->getColors().textColor);
+            ofSetColor(0);
             timeline->getFont().drawString(text, previewTimecodeX, bounds.y+textH*2);
         }
 		
@@ -139,8 +147,9 @@ void ofxTLTicker::draw(){
         int timeCodeX = ofClamp(currentFrameX+5, bounds.getMinX(), bounds.getMaxX()-textW-5);
         ofSetColor(timeline->getColors().backgroundColor);
         ofFill();
-        ofRect(timeCodeX-5, bounds.y, textW, textH);
-        ofSetColor(timeline->getColors().textColor);
+//        ofRect(timeCodeX-5, bounds.y, textW, textH);
+//        ofSetColor(timeline->getColors().textColor);
+        ofSetColor(0);
         timeline->getFont().drawString(text, timeCodeX, bounds.y+textH);
     }
 	
@@ -156,7 +165,7 @@ void ofxTLTicker::draw(){
 	ofLine(currentFrameX, totalDrawRect.y, currentFrameX, totalDrawRect.y+totalDrawRect.height);
 	//draw bounds 
 	ofNoFill();
-	ofSetColor(200, 180, 40);
+    ofSetColor(0);
 	ofRect(bounds);
 		
 	ofPopStyle();
@@ -206,7 +215,7 @@ void ofxTLTicker::refreshTickMarks()
 	bool showMillis;
 	bool showSeconds;
 	bool showMinutes;
-	int step = 4;
+	int step = 10;
 	
     //find the scale of time being shown
 	if(millisPerPixel > 1000*60 * step)

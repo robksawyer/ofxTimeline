@@ -124,7 +124,7 @@ bool ofxTLFileSelectFlags::mousePressed(ofMouseEventArgs& args, long millis)
             // OS specific results here.  "" = cancel or something bad like can't load, can't save, etc...
 //            ofFileDialogResult ofSystemLoadDialog(string windowTitle, bool bFolderSelection, string defaultPath){
             ofFileDialogResult res;
-            res = ofSystemLoadDialog("Load Preset ?",false,".");
+            res = ofSystemLoadDialog("Load Preset ?",false,defaultPath);
             if(res.bSuccess)
             {
                 cout << "TLFileSelectFlags :" <<  res.getName() << " : " << res.getPath()  << endl;
@@ -386,7 +386,8 @@ void ofxTLFileSelectFlags::willDeleteKeyframe(ofxTLKeyframe* keyframe){
 //    flag->textField.disable();
 }
 
-void ofxTLFileSelectFlags::bangFired(ofxTLKeyframe* key){
+void ofxTLFileSelectFlags::bangFired(ofxTLKeyframe* key)
+{
     ofxTLBangEventArgs args;
     args.sender = timeline;
     args.track = this;
@@ -405,11 +406,13 @@ void ofxTLFileSelectFlags::bangFired(ofxTLKeyframe* key){
 //    string selectedLabel;
 //    ofxDatGuiDropdown* fl = ((ofxTLDropDownFlag*)key)->menu;
 //    selectedLabel = ofToString(fl->getSelectedIndex());
-    args.flag = ((ofxTLFileSelectFlag*)key)->flagButton->getLabel();
-    
-    ofNotifyEvent(events().bangFired, args);
 
-    cout << " path_ " <<  ((ofxTLFileSelectFlag*)key)->path << endl;
+    // to send just the name of the preset ... not enough so commented it ...
+//    args.flag = ((ofxTLFileSelectFlag*)key)->flagButton->getLabel();
+//    ofNotifyEvent(events().bangFired, args);
+
+//    cout << " path_ " <<  ((ofxTLFileSelectFlag*)key)->path << endl;
+
     args.flag = ((ofxTLFileSelectFlag*)key)->path;
 
     ofNotifyEvent(events().bangFired, args);
@@ -483,6 +486,12 @@ void ofxTLFileSelectFlags::update()
              */
         }
     }
+}
+
+void ofxTLFileSelectFlags::setDefaultPath(string s)
+{
+    defaultPath = s;
+    cout << "ofxTLFileSelectFlags::setDefaultPath to : " <<defaultPath << endl;
 }
 
 

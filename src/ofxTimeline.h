@@ -181,7 +181,8 @@ class ofxTimeline : ofThread {
 	float getDurationInSeconds();
     long getDurationInMilliseconds();
 	string getDurationInTimecode();
-
+    ofVec2f getOffset() {return offset;};
+    
     //frame based mode timelines will never skip frames, and will advance at the speed of openFrameworks
     //regardless of the FPS that you set the timeline to
     void setFrameBased(bool frameBased);
@@ -495,7 +496,7 @@ class ofxTimeline : ofThread {
 	//binary test hack
 	bool curvesUseBinary;
 	
-  protected:
+protected:
 
     ofxTimecode timecode;
 	ofxMSATimer timer;

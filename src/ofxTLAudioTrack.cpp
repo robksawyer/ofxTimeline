@@ -56,12 +56,23 @@ bool ofxTLAudioTrack::loadSoundfile(string filepath){
         player.getSpectrum(defaultSpectrumBandwidth);
         setFFTLogAverages();
         averageSize = player.getAverages().size();
+        
+        vector <string> result = ofSplitString(soundFilePath, "/");
+        soundFileName = result[result.size()-1];
+
+        cout << "ofxTLAudioTrack loading sound named : " <<soundFileName << endl;
     }
 	return soundLoaded;
 }
  
-string ofxTLAudioTrack::getSoundfilePath(){
-	return soundFilePath;
+
+string ofxTLAudioTrack::getSoundfilePath()
+{
+    return soundFilePath;
+}
+string ofxTLAudioTrack::getSoundfileName()
+{
+    return soundFileName;
 }
 
 bool ofxTLAudioTrack::isSoundLoaded(){
@@ -477,3 +488,18 @@ string ofxTLAudioTrack::getTrackType(){
 }
 
    
+float ofxTLAudioTrack::getEnergy()
+{
+    vector<float> buff = getCurrentBuffer();
+    float sum = 0.0;
+    if(buff.size()!=0)
+    {
+        for(int i=0;i<buff.size();i++)
+        {
+            sum = sum + 2*fabs(buff[i]);
+        }
+        return sum/buff.size();
+    }
+    else return (0);
+}
+ 

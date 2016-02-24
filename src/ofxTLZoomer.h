@@ -70,7 +70,10 @@ class ofxTLZoomer : public ofxTLTrack
 	//this set is NON exponential, but normalized 0-1
 	void setViewRange(ofRange newRange);
     ofRange getSelectedRange(); //non exponential
-	
+    void setViewRange2(ofRange newRange); // eloi try
+    float getExponent() {return zoomExponent;};
+    
+    
   private:
 	void notifyZoomStarted();
 	void notifyZoomDragged(ofRange oldZoom);
